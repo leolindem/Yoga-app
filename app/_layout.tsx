@@ -31,6 +31,13 @@ export default function RootLayout() {
     <ThemeProvider value={DarkTheme}>
       <Stack>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen
+          name="workout/[id]"
+          options={{
+            presentation: "modal",
+            animation: "slide_from_bottom", // Ensures it slides from bottom
+          }}
+        />
         <Stack.Screen name="+not-found" />
       </Stack>
       <StatusBar style="auto" />

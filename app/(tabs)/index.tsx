@@ -1,8 +1,8 @@
-import { StyleSheet, SafeAreaView, FlatList } from 'react-native';
+import { StyleSheet, SafeAreaView, FlatList } from "react-native";
 
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
-import { WorkoutCard } from '@/components/WorkoutCard';
+import { ThemedText } from "@/components/ThemedText";
+import { ThemedView } from "@/components/ThemedView";
+import { WorkoutCard } from "@/components/WorkoutCard";
 
 const workouts = [
   { id: "1", title: "Morning Yoga", time: "2:00" },
@@ -24,7 +24,11 @@ export default function HomeScreen() {
             keyExtractor={(item) => item.id}
             numColumns={2}
             renderItem={({ item }) => (
-              <WorkoutCard title={item.title} time={item.time} />
+              <WorkoutCard
+                title={item.title}
+                time={item.time}
+                pathname={`/workout/${item.id}`}
+              />
             )}
             contentContainerStyle={styles.grid}
           />
@@ -40,13 +44,12 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    justifyContent: 'flex-start',
-    alignItems: 'center',
+    justifyContent: "flex-start",
+    alignItems: "center",
     paddingTop: 50,
   },
   grid: {
     paddingVertical: 20,
     flex: 1,
   },
-
-})
+});
