@@ -1,49 +1,78 @@
 import { useState, useEffect } from "react";
-import { useRouter, useLocalSearchParams } from "expo-router";
+import { useLocalSearchParams } from "expo-router";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { StyleSheet, Image } from "react-native";
 import { Bar as ProgressBar } from "react-native-progress";
+import workoutDetails from "@/data/workoutData";
 
 export default function WorkoutDetailScreen() {
   const { id } = useLocalSearchParams();
-  const [seconds, setSeconds] = useState(60);
+  const workout = workoutDetails[id as string];
+
+  const [currentStretchIndex, setCurrentStretchIndex] = useState(0);
+  const [seconds, setSeconds] = useState(workout.stretches[0].duration);
   const [progress, setProgress] = useState(0);
-  let barIncrement = 1 / 60;
+  const totalStretches = workout.stretches.length;
 
   useEffect(() => {
+    if (currentStretchIndex >= totalStretches) return;
+
     const interval = setInterval(() => {
-      setSeconds((prev) => (prev > 0 ? prev - 1 : 0));
-      setProgress((prev) => prev + barIncrement);
+      setSeconds((prev) => {
+        if (prev > 0) return prev - 1;
+
+        if (currentStretchIndex < totalStretches - 1){
+          setCurrentStretchIndex((prevIndex) => prevIndex + 1);
+          return workout.stretches[currentStretchIndex + 1].duration
+        } else {
+          clearInterval(interval)
+          return 0;
+        }
+      });
+
+      setProgress((prev) =>
+        prev >= 1
+          ? 0
+          : prev + 1 / workout.stretches[currentStretchIndex].duration
+      );
     }, 1000);
 
-    return () => clearInterval(interval);
-  }, []);
+    return () => {
+      clearInterval(interval);
+      setProgress(0);
+    };
+  }, [currentStretchIndex]);
 
   return (
     <>
       <ThemedView style={styles.workoutTitle}>
-        <ThemedText>Workout 1 of 5</ThemedText>
+        <ThemedText>Workout {currentStretchIndex + 1} of {totalStretches}</ThemedText>
+        <ThemedText>{workout.title}</ThemedText>
       </ThemedView>
 
-      <ThemedView style={styles.container} darkColor="#000000">
-        <ThemedView darkColor="#000000" style={styles.workout_container}>
-          <Image
-            source={require("@/assets/images/lunge.png")}
-            style={styles.image}
-          />
-          <ProgressBar
-            width={300}
-            height={20}
-            color="white"
-            borderRadius={20}
-            progress={progress}
-          />
-          <ThemedText type="title" style={{ marginTop: 30 }}>
-            {seconds}s
-          </ThemedText>
+      {currentStretchIndex < totalStretches ? (
+        <ThemedView style={styles.container} darkColor="#000000">
+          <ThemedView darkColor="#000000" style={styles.workout_container}>
+            <Image
+              source={workout.stretches[currentStretchIndex].image}
+              style={styles.image}
+            />
+            <ProgressBar
+              width={300}
+              height={20}
+              color="white"
+              borderRadius={20}
+              progress={progress}
+            />
+            <ThemedText type="title" style={{ marginTop: 30 }}>
+              {seconds}s
+            </ThemedText>
+          </ThemedView>
         </ThemedView>
-      </ThemedView>
+      ) : (
+        <ThemedText>Workout Done!</ThemedText>
+      )}
     </>
   );
 }
