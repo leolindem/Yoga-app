@@ -3,6 +3,7 @@ import { StyleSheet, SafeAreaView, FlatList } from "react-native";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { WorkoutCard } from "@/components/WorkoutCard";
+import workoutDetails, { Workout } from "@/data/workoutData";
 
 const workouts = [
   { id: "1", title: "Morning Yoga", time: "2:00" },
@@ -14,20 +15,22 @@ const workouts = [
 ];
 
 export default function HomeScreen() {
+
+  const workoutArray: Workout[] = Object.values(workoutDetails);
   return (
     <>
       <SafeAreaView style={styles.container}>
         <ThemedView style={styles.container}>
           <ThemedText type="title">Good Stretch</ThemedText>
           <FlatList
-            data={workouts}
-            keyExtractor={(item) => item.id}
+            data={workoutArray}
+            keyExtractor={(item, index) => index.toString()}
             numColumns={2}
-            renderItem={({ item }) => (
+            renderItem={({ item, index }) => (
               <WorkoutCard
                 title={item.title}
-                time={item.time}
-                pathname={`/workout/${item.id}`}
+                time={item.totalDuration}
+                pathname={`/workout/${(index + 1).toString()}`}
               />
             )}
             contentContainerStyle={styles.grid}

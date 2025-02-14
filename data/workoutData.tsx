@@ -1,5 +1,6 @@
 export type Workout = {
   title: string;
+  totalDuration: string;
   stretches: {
     name: string;
     image: any;
@@ -10,6 +11,7 @@ export type Workout = {
 const workoutDetails: Record<string, Workout> = {
   "1": {
     title: "Morning Stretch",
+    totalDuration: "2:00",
     stretches: [
       {
         name: "Lunge",
