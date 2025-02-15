@@ -16,6 +16,8 @@ export default function WorkoutDetailScreen() {
   const [progress, setProgress] = useState(0);
   const [paused, setPaused] = useState(false);
   const totalStretches = workout.stretches.length;
+  const pauseIcon = require("@/assets/images/pause_white.png");
+  const playIcon = require("@/assets/images/play_white.png");
 
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -44,14 +46,14 @@ export default function WorkoutDetailScreen() {
     }, 1000);
 
     return () => clearInterval(intervalRef.current!);
-  }, [currentStretchIndex, paused, totalStretches, workout.stretches]);
+  }, [currentStretchIndex, paused]);
 
   useEffect(() => {
     if (currentStretchIndex < totalStretches) {
       setProgress(0);
       setSeconds(workout.stretches[currentStretchIndex].duration);
     }
-  }, [currentStretchIndex, totalStretches, workout.stretches]);
+  }, [currentStretchIndex]);
 
   const togglePause = () => {
     setPaused((prev) => !prev);
@@ -96,11 +98,9 @@ export default function WorkoutDetailScreen() {
                   style={styles.controlButtons}
                 />
               </TouchableOpacity>
-              <TouchableOpacity
-                onPress={togglePause}
-              >
+              <TouchableOpacity onPress={togglePause}>
                 <Image
-                  source={require("@/assets/images/pause_white.png")}
+                  source={paused ? playIcon : pauseIcon}
                   style={styles.pauseButton}
                 />
               </TouchableOpacity>
