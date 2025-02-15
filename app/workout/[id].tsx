@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
@@ -14,37 +14,54 @@ export default function WorkoutDetailScreen() {
   const [currentStretchIndex, setCurrentStretchIndex] = useState(0);
   const [seconds, setSeconds] = useState(workout.stretches[0].duration);
   const [progress, setProgress] = useState(0);
+  const [paused, setPaused] = useState(false);
   const totalStretches = workout.stretches.length;
 
-  useEffect(() => {
-    if (currentStretchIndex >= totalStretches) return;
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
-    const interval = setInterval(() => {
-      setSeconds((prev) => {
-        if (prev > 0) return prev - 1;
+  useEffect(() => {
+    if (paused || currentStretchIndex >= totalStretches) return;
+
+    intervalRef.current = setInterval(() => {
+      setSeconds((prevSeconds) => {
+        if (prevSeconds > 0) return prevSeconds - 1;
 
         if (currentStretchIndex < totalStretches - 1) {
           setCurrentStretchIndex((prevIndex) => prevIndex + 1);
           return workout.stretches[currentStretchIndex + 1].duration;
         } else {
-          clearInterval(interval);
+          clearInterval(intervalRef.current!);
           setCurrentStretchIndex(totalStretches);
           return 0;
         }
       });
 
-      setProgress((prev) =>
-        prev >= 1
+      setProgress((prevProgress) =>
+        prevProgress >= 1
           ? 0
-          : prev + 1 / workout.stretches[currentStretchIndex].duration
+          : prevProgress + 1 / workout.stretches[currentStretchIndex].duration
       );
     }, 1000);
 
-    return () => {
-      clearInterval(interval);
+    return () => clearInterval(intervalRef.current!);
+  }, [currentStretchIndex, paused, totalStretches, workout.stretches]);
+
+  useEffect(() => {
+    if (currentStretchIndex < totalStretches) {
       setProgress(0);
-    };
-  }, [currentStretchIndex]);
+      setSeconds(workout.stretches[currentStretchIndex].duration);
+    }
+  }, [currentStretchIndex, totalStretches, workout.stretches]);
+
+  const togglePause = () => {
+    setPaused((prev) => !prev);
+    if (paused && intervalRef.current === null) {
+      setPaused(false);
+    } else {
+      clearInterval(intervalRef.current!);
+      intervalRef.current = null;
+    }
+  };
 
   return (
     <>
@@ -56,8 +73,8 @@ export default function WorkoutDetailScreen() {
       </ThemedView>
 
       {currentStretchIndex < totalStretches ? (
-        <ThemedView style={styles.container} darkColor="#000000">
-          <ThemedView darkColor="#000000" style={styles.workout_container}>
+        <ThemedView style={styles.container}>
+          <ThemedView style={styles.workout_container}>
             <Image
               source={workout.stretches[currentStretchIndex].image}
               style={styles.image}
@@ -80,7 +97,7 @@ export default function WorkoutDetailScreen() {
                 />
               </TouchableOpacity>
               <TouchableOpacity
-                // onPress={() => clearInterval(interval)}
+                onPress={togglePause}
               >
                 <Image
                   source={require("@/assets/images/pause_white.png")}
