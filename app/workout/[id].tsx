@@ -23,7 +23,7 @@ export default function WorkoutDetailScreen() {
       setSeconds((prev) => {
         if (prev > 0) return prev - 1;
 
-        if (currentStretchIndex < totalStretches - 1){
+        if (currentStretchIndex < totalStretches - 1) {
           setCurrentStretchIndex((prevIndex) => prevIndex + 1);
           return workout.stretches[currentStretchIndex + 1].duration;
         } else {
@@ -72,6 +72,28 @@ export default function WorkoutDetailScreen() {
             <ThemedText type="title" style={{ marginTop: 30 }}>
               {seconds}s
             </ThemedText>
+            <ThemedView style={styles.controlButtonsContainer}>
+              <TouchableOpacity>
+                <Image
+                  source={require("@/assets/images/back_white.png")}
+                  style={styles.controlButtons}
+                />
+              </TouchableOpacity>
+              <TouchableOpacity
+                // onPress={() => clearInterval(interval)}
+              >
+                <Image
+                  source={require("@/assets/images/pause_white.png")}
+                  style={styles.pauseButton}
+                />
+              </TouchableOpacity>
+              <TouchableOpacity>
+                <Image
+                  source={require("@/assets/images/skip_white.png")}
+                  style={styles.controlButtons}
+                />
+              </TouchableOpacity>
+            </ThemedView>
           </ThemedView>
         </ThemedView>
       ) : (
@@ -123,7 +145,7 @@ const styles = StyleSheet.create({
   doneButton: {
     marginTop: 50,
     flex: 1,
-    alignItems: 'center',
+    alignItems: "center",
   },
   button: {
     backgroundColor: "#FFFFFF", // White background
@@ -134,6 +156,22 @@ const styles = StyleSheet.create({
   buttonText: {
     color: "#000000", // Black text for contrast
     fontSize: 16,
-    paddingHorizontal: 80
+    paddingHorizontal: 80,
+  },
+  controlButtons: {
+    width: 80,
+    height: 80,
+    resizeMode: "cover",
+  },
+  pauseButton: {
+    width: 80,
+    height: 80,
+    marginHorizontal: 30,
+  },
+  controlButtonsContainer: {
+    flex: 1,
+    width: "100%",
+    flexDirection: "row",
+    marginTop: 50,
   },
 });
