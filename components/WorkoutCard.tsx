@@ -31,8 +31,10 @@ export function WorkoutCard({
               source={require("@/assets/images/pose1.png")}
               style={styles.image}
             />
-            <ThemedText>{title}</ThemedText>
-            <ThemedText>{time}</ThemedText>
+            <ThemedText type="defaultSemiBold" style={styles.stretchText}>
+              {title}
+            </ThemedText>
+            <ThemedText type="defaultSemiBold">{time}</ThemedText>
           </ThemedView>
         </TouchableOpacity>
       </Link>
@@ -45,14 +47,19 @@ const styles = StyleSheet.create({
     alignItems: "center",
     margin: 20,
     padding: 10,
-    borderColor: "white",
+    borderColor: "#343635",
     borderWidth: 1,
     borderRadius: 10,
+
   },
   image: {
-    width: 150,
+    width: 100,
     height: 80,
     resizeMode: "cover",
     borderRadius: 10,
+    marginHorizontal: 25,
+  },
+  stretchText: {
+    marginTop: 10,
   },
 });

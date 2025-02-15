@@ -26,6 +26,7 @@ export default function HomeScreen() {
             data={workoutArray}
             keyExtractor={(item, index) => index.toString()}
             numColumns={2}
+            columnWrapperStyle={{ justifyContent: "space-around" }}
             renderItem={({ item, index }) => (
               <WorkoutCard
                 title={item.title}
@@ -54,5 +55,6 @@ const styles = StyleSheet.create({
   grid: {
     paddingVertical: 20,
     flex: 1,
+    alignItems: 'center'
   },
 });
