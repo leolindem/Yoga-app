@@ -92,7 +92,13 @@ export default function WorkoutDetailScreen() {
               {seconds}s
             </ThemedText>
             <ThemedView style={styles.controlButtonsContainer}>
-              <TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => {
+                  if (currentStretchIndex > 0) {
+                    setCurrentStretchIndex(currentStretchIndex - 1);
+                  }
+                }}
+              >
                 <Image
                   source={require("@/assets/images/back_white.png")}
                   style={styles.controlButtons}
@@ -104,7 +110,11 @@ export default function WorkoutDetailScreen() {
                   style={styles.pauseButton}
                 />
               </TouchableOpacity>
-              <TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => {
+                  setCurrentStretchIndex(currentStretchIndex + 1);
+                }}
+              >
                 <Image
                   source={require("@/assets/images/skip_white.png")}
                   style={styles.controlButtons}
