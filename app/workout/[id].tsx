@@ -11,6 +11,8 @@ export default function WorkoutDetailScreen() {
   const workout = workoutDetails[id as string];
   const router = useRouter();
   const [started, setStarted] = useState(false);
+  const [countdown, setCountdown] = useState(0);
+  const [countdownFinished, setCountdownFinished] = useState(false);
   const [currentStretchIndex, setCurrentStretchIndex] = useState(0);
   const [seconds, setSeconds] = useState(workout.stretches[0].duration);
   const [progress, setProgress] = useState(0);
@@ -22,7 +24,7 @@ export default function WorkoutDetailScreen() {
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
-    if (paused || currentStretchIndex >= totalStretches || !started) return;
+    if (paused || currentStretchIndex >= totalStretches || !started || !countdownFinished) return;
 
     intervalRef.current = setInterval(() => {
       setSeconds((prevSeconds) => {
@@ -46,7 +48,7 @@ export default function WorkoutDetailScreen() {
     }, 1000);
 
     return () => clearInterval(intervalRef.current!);
-  }, [currentStretchIndex, paused, started]);
+  }, [currentStretchIndex, paused, started, countdown]);
 
   useEffect(() => {
     if (currentStretchIndex < totalStretches) {
@@ -54,6 +56,22 @@ export default function WorkoutDetailScreen() {
       setSeconds(workout.stretches[currentStretchIndex].duration);
     }
   }, [currentStretchIndex]);
+
+  useEffect(() => {
+    if (started && countdown > 0) {
+      const timer = setInterval(() => {
+        setCountdown((prev) => {
+          if (prev === 1) {
+            setCountdownFinished(true);
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+
+      return () => clearInterval(timer);
+    }
+  }, [started, countdown]);
 
   const togglePause = () => {
     setPaused((prev) => !prev);
@@ -64,94 +82,101 @@ export default function WorkoutDetailScreen() {
       intervalRef.current = null;
     }
   };
+  if (!started) {
+    return (
+      <ThemedView style={styles.container}>
+        <ThemedText type="title">{workout.title}</ThemedText>
+        <Image
+          source={require("@/assets/images/pose1.png")}
+          style={styles.details_img}
+        />
+        <Button title="Start workout" onPress={() => {
+          setCountdown(3)
+          setStarted(true);
+          setCountdownFinished(false);
+        }}
+          />
+      </ThemedView>
+    );
+  }
+  if (countdown > 0) {
+    return (
+      <ThemedView style={styles.countdown_container}>
+        <ThemedText style={styles.countdown}>{countdown}</ThemedText>
+      </ThemedView>
+    )
+  }
 
   return (
     <>
-      {!started ? (
+      <ThemedView style={styles.workoutTitle}>
+        <ThemedText>
+          Workout {currentStretchIndex + 1} of {totalStretches}
+        </ThemedText>
+        <ThemedText>{workout.title}</ThemedText>
+      </ThemedView>
+
+      {currentStretchIndex < totalStretches ? (
         <ThemedView style={styles.container}>
-          <ThemedText type="title">{workout.title}</ThemedText>
-          <Image
-            source={require("@/assets/images/pose1.png")}
-            style={styles.details_img}
-          ></Image>
-            <Button 
-            title="Start workout"
-            onPress={() => setStarted(true)}
-            >
-            </Button>
+          <ThemedView style={styles.workout_container}>
+            <Image
+              source={workout.stretches[currentStretchIndex].image}
+              style={styles.image}
+            />
+            <ProgressBar
+              width={300}
+              height={20}
+              color="white"
+              borderRadius={20}
+              progress={progress}
+            />
+            <ThemedText type="title" style={{ marginTop: 30 }}>
+              {seconds}s
+            </ThemedText>
+            <ThemedView style={styles.controlButtonsContainer}>
+              <TouchableOpacity
+                onPress={() => {
+                  if (currentStretchIndex > 0) {
+                    setCurrentStretchIndex(currentStretchIndex - 1);
+                  }
+                }}
+              >
+                <Image
+                  source={require("@/assets/images/back_white.png")}
+                  style={styles.controlButtons}
+                />
+              </TouchableOpacity>
+              <TouchableOpacity onPress={togglePause}>
+                <Image
+                  source={paused ? playIcon : pauseIcon}
+                  style={styles.pauseButton}
+                />
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => {
+                  setCurrentStretchIndex(currentStretchIndex + 1);
+                }}
+              >
+                <Image
+                  source={require("@/assets/images/skip_white.png")}
+                  style={styles.controlButtons}
+                />
+              </TouchableOpacity>
+            </ThemedView>
+          </ThemedView>
         </ThemedView>
       ) : (
-        <>
-          <ThemedView style={styles.workoutTitle}>
-            <ThemedText>
-              Workout {currentStretchIndex + 1} of {totalStretches}
-            </ThemedText>
-            <ThemedText>{workout.title}</ThemedText>
+        <ThemedView style={styles.done}>
+          <ThemedText type="title">Workout Done!</ThemedText>
+          <ThemedView style={styles.doneButton}>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => router.back()}
+            >
+              <ThemedText style={styles.buttonText}>Back</ThemedText>
+            </TouchableOpacity>
           </ThemedView>
-
-          {currentStretchIndex < totalStretches ? (
-            <ThemedView style={styles.container}>
-              <ThemedView style={styles.workout_container}>
-                <Image
-                  source={workout.stretches[currentStretchIndex].image}
-                  style={styles.image}
-                />
-                <ProgressBar
-                  width={300}
-                  height={20}
-                  color="white"
-                  borderRadius={20}
-                  progress={progress}
-                />
-                <ThemedText type="title" style={{ marginTop: 30 }}>
-                  {seconds}s
-                </ThemedText>
-                <ThemedView style={styles.controlButtonsContainer}>
-                  <TouchableOpacity
-                    onPress={() => {
-                      if (currentStretchIndex > 0) {
-                        setCurrentStretchIndex(currentStretchIndex - 1);
-                      }
-                    }}
-                  >
-                    <Image
-                      source={require("@/assets/images/back_white.png")}
-                      style={styles.controlButtons}
-                    />
-                  </TouchableOpacity>
-                  <TouchableOpacity onPress={togglePause}>
-                    <Image
-                      source={paused ? playIcon : pauseIcon}
-                      style={styles.pauseButton}
-                    />
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    onPress={() => {
-                      setCurrentStretchIndex(currentStretchIndex + 1);
-                    }}
-                  >
-                    <Image
-                      source={require("@/assets/images/skip_white.png")}
-                      style={styles.controlButtons}
-                    />
-                  </TouchableOpacity>
-                </ThemedView>
-              </ThemedView>
-            </ThemedView>
-          ) : (
-            <ThemedView style={styles.done}>
-              <ThemedText type="title">Workout Done!</ThemedText>
-              <ThemedView style={styles.doneButton}>
-                <TouchableOpacity
-                  style={styles.button}
-                  onPress={() => router.back()}
-                >
-                  <ThemedText style={styles.buttonText}>Back</ThemedText>
-                </TouchableOpacity>
-              </ThemedView>
-            </ThemedView>
-          )}
-        </>
+        </ThemedView>
       )}
     </>
   );
@@ -223,5 +248,15 @@ const styles = StyleSheet.create({
     height: 300,
     resizeMode: "cover",
     marginTop: 20,
+  },
+  countdown_container: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  countdown: {
+    fontSize: 150,
+    fontWeight: "bold",
+    lineHeight: 150,
   },
 });
