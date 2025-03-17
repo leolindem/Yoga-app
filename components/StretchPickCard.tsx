@@ -2,21 +2,20 @@ import { ThemedText } from "./ThemedText";
 import { ThemedView } from "./ThemedView";
 import {
   StyleSheet,
-  ViewStyle,
-  StyleProp,
   Image,
   TouchableOpacity,
 } from "react-native";
 
 type StrechCardProps = {
   title: string;
-  image_path: string;
+  imagePath: string;
+  selected: boolean;
 };
 
-export function StretchPickCard({ title, image_path }: StrechCardProps) {
+export function StretchPickCard({ title, imagePath, selected = false }: StrechCardProps) {
   return (
     <>
-      <ThemedView style={styles.card}>
+      <ThemedView style={!selected ? styles.card : styles.selectedCard }>
         <Image
           source={require("@/assets/images/pose1.png")}
           style={styles.image}
@@ -35,6 +34,14 @@ const styles = StyleSheet.create({
     margin: 20,
     padding: 10,
     borderColor: "#343635",
+    borderWidth: 1,
+    borderRadius: 10,
+  },
+  selectedCard : {
+    alignItems: "center",
+    margin: 20,
+    padding: 10,
+    borderColor: "#2ee866",
     borderWidth: 1,
     borderRadius: 10,
   },
