@@ -65,6 +65,11 @@ export default function StretchTimingScreen() {
           </ThemedView>
         </ThemedView>
       ))}
+      <TouchableOpacity>
+        <ThemedView style={styles.buttonContainer}>
+          <ThemedText style={styles.buttonText}>Save Workout</ThemedText>
+        </ThemedView>
+      </TouchableOpacity>
     </>
   );
 }
@@ -95,9 +100,22 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   images: {
-    width: 20,
-    height: 20,
+    width: 30,
+    height: 30,
     marginHorizontal: 20,
     resizeMode: "cover",
   },
+  buttonContainer: {
+    bottom: 60,
+    alignSelf: "center",
+    backgroundColor: "#FFFFFF",
+    borderRadius: 7,
+    marginTop: 100,
+  },
+  buttonText: {
+    color: "#000000",
+    fontSize: 25,
+    paddingHorizontal: 30,
+    paddingVertical: 10,
+  }
 });
