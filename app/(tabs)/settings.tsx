@@ -1,4 +1,5 @@
-import { StyleSheet, SafeAreaView } from 'react-native';
+import { StyleSheet, SafeAreaView, TouchableOpacity } from 'react-native';
+import { Link, Href } from "expo-router";
 
 import { Collapsible } from '@/components/Collapsible';
 import { ExternalLink } from '@/components/ExternalLink';
@@ -15,6 +16,11 @@ export default function TabTwoScreen() {
           <ThemedText type="title">Streaks</ThemedText>
         </ThemedView>
         <ThemedText style={styles.streakNum}>0</ThemedText>
+        <Link href={"/customizer" as Href} asChild>
+          <TouchableOpacity>
+            <ThemedText>Create your workout</ThemedText>
+          </TouchableOpacity>
+        </Link>
       </SafeAreaView>
     </>
   );

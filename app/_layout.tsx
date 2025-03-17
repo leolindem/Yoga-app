@@ -38,6 +38,7 @@ export default function RootLayout() {
             animation: "slide_from_bottom", // Ensures it slides from bottom
           }}
         />
+        <Stack.Screen name="customizer" />
         <Stack.Screen name="+not-found" />
       </Stack>
       <StatusBar style="auto" />

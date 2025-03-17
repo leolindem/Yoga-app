@@ -90,12 +90,15 @@ export default function WorkoutDetailScreen() {
           source={require("@/assets/images/pose1.png")}
           style={styles.details_img}
         />
-        <Button title="Start workout" onPress={() => {
+        <TouchableOpacity onPress={() => {
           setCountdown(3)
           setStarted(true);
           setCountdownFinished(false);
         }}
-          />
+        style={styles.button}
+        >
+        <ThemedText style={styles.buttonText}>Start Workout</ThemedText>
+        </TouchableOpacity>
       </ThemedView>
     );
   }
@@ -244,10 +247,11 @@ const styles = StyleSheet.create({
     marginTop: 50,
   },
   details_img: {
-    width: 300,
-    height: 300,
+    width: 200,
+    height: 200,
     resizeMode: "cover",
-    marginTop: 20,
+    marginTop: 50,
+    marginBottom: 30,
   },
   countdown_container: {
     flex: 1,
