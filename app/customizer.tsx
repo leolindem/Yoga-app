@@ -1,11 +1,11 @@
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { StyleSheet, SafeAreaView, FlatList } from "react-native";
-import stretchData from "@/data/stretchesData"
+import stretchData from "@/data/stretchesData";
 import { StretchPickCard } from "@/components/StretchPickCard";
 
 export default function CustomizerScreen() {
-  const stretchArray =  Object.entries(stretchData)
+  const stretchArray = Object.entries(stretchData);
   return (
     <>
       <ThemedText>Choose the Stretches</ThemedText>
@@ -18,10 +18,7 @@ export default function CustomizerScreen() {
           const [name, image] = item;
           return (
             <ThemedView>
-              <StretchPickCard
-                title={name}
-                image_path={image}
-              />
+              <StretchPickCard title={name} image_path={image} />
             </ThemedView>
           );
         }}

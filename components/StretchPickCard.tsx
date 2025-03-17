@@ -13,22 +13,18 @@ type StrechCardProps = {
   image_path: string;
 };
 
-export function StretchPickCard({
-  title,
-  image_path,
-}: StrechCardProps) {
+export function StretchPickCard({ title, image_path }: StrechCardProps) {
   return (
     <>
-          <ThemedView style={styles.card}>
-            <Image
-              source={require("@/assets/images/pose1.png")}
-              style={styles.image}
-            />
-            <ThemedText type="defaultSemiBold" style={styles.stretchText}>
-              {title}
-            </ThemedText>
-          </ThemedView>
-
+      <ThemedView style={styles.card}>
+        <Image
+          source={require("@/assets/images/pose1.png")}
+          style={styles.image}
+        />
+        <ThemedText type="defaultSemiBold" style={styles.stretchText}>
+          {title}
+        </ThemedText>
+      </ThemedView>
     </>
   );
 }

@@ -11,4 +11,4 @@ const workoutDetails: Record<string, any> = {
   ["Sphinx Pose"]: require("@/assets/images/lunge.png"),
 };
 
-export default workoutDetails
+export default workoutDetails;
