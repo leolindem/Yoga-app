@@ -6,7 +6,7 @@ import {
   FlatList,
   TouchableOpacity,
 } from "react-native";
-import { useState, useEffect, useRef } from "react";
+import { useState } from "react";
 import { Link, Href } from "expo-router";
 import stretchData from "@/data/stretchesData";
 import { StretchPickCard } from "@/components/StretchPickCard";
@@ -23,6 +23,10 @@ export default function CustomizerScreen() {
       [name]: !prevSelected[name],
     }));
   };
+
+  const selectedStretchesParam = encodeURIComponent(
+    JSON.stringify(selectedStretches)
+  );
 
   return (
     <>
@@ -48,7 +52,12 @@ export default function CustomizerScreen() {
         }}
       />
       <ThemedView style={styles.ListSpace}></ThemedView>
-      <Link href={"/customizer/timeScreen" as Href} asChild>
+      <Link
+        href={
+          `/customizer/timeScreen?selectedStretches=${selectedStretchesParam}` as Href
+        }
+        asChild
+      >
         <TouchableOpacity>
           <ThemedView style={styles.buttonContainer}>
             <ThemedText style={styles.buttonText}>Continue</ThemedText>
