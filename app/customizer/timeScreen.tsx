@@ -1,5 +1,6 @@
+import { useState } from "react";
 import { Link, Stack, useLocalSearchParams } from "expo-router";
-import { StyleSheet, Image } from "react-native";
+import { StyleSheet, Image, TouchableOpacity } from "react-native";
 
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
@@ -12,13 +13,32 @@ export default function StretchTimingScreen() {
     ? JSON.parse(decodeURIComponent(selectedStretches))
     : {};
   const defaultDuration = 30;
-  const timedStretchDict: { [key: string]: number } = {};
 
-  Object.keys(stretches).forEach((stretchName) => {
-    if (stretches[stretchName]) {
-      timedStretchDict[stretchName] = defaultDuration;
-    }
+  const [timedStretchDict, setTimedStretchDict] = useState<{
+    [key: string]: number;
+  }>(() => {
+    const initialDict: { [key: string]: number } = {};
+    Object.keys(stretches).forEach((stretchName) => {
+      if (stretches[stretchName]) {
+        initialDict[stretchName] = defaultDuration;
+      }
+    });
+    return initialDict;
   });
+
+  const timeMinus = (stretchName: string) => {
+    setTimedStretchDict((prevDict) => ({
+      ...prevDict,
+      [stretchName]: Math.max(15, prevDict[stretchName] - 15),
+    }));
+  };
+
+  const timePlus = (stretchName: string) => {
+    setTimedStretchDict((prevDict) => ({
+      ...prevDict,
+      [stretchName]: prevDict[stretchName] + 15,
+    }));
+  };
 
   return (
     <>
@@ -29,15 +49,19 @@ export default function StretchTimingScreen() {
         <ThemedView key={name} style={styles.strechContainer}>
           <ThemedText style={styles.stretchText}>{`${name}`}</ThemedText>
           <ThemedView style={styles.timeContainer}>
-            <Image
-              source={require("@/assets/images/minus-white.png")}
-              style={styles.images}
-            ></Image>
+            <TouchableOpacity onPress={() => timeMinus(name)}>
+              <Image
+                source={require("@/assets/images/minus-white.png")}
+                style={styles.images}
+              ></Image>
+            </TouchableOpacity>
             <ThemedText style={styles.timeDigits}>{duration}s</ThemedText>
-            <Image
-              source={require("@/assets/images/plus-symbol-white.png")}
-              style={styles.images}
-            ></Image>
+            <TouchableOpacity onPress={() => timePlus(name)}>
+              <Image
+                source={require("@/assets/images/plus-symbol-white.png")}
+                style={styles.images}
+              ></Image>
+            </TouchableOpacity>
           </ThemedView>
         </ThemedView>
       ))}
