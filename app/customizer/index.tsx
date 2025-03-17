@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { useState, useEffect, useRef } from "react";
+import { Link, Href } from "expo-router";
 import stretchData from "@/data/stretchesData";
 import { StretchPickCard } from "@/components/StretchPickCard";
 
@@ -46,6 +47,33 @@ export default function CustomizerScreen() {
           );
         }}
       />
+      <ThemedView style={styles.ListSpace}></ThemedView>
+      <Link href={"/customizer/timeScreen" as Href} asChild>
+        <TouchableOpacity>
+          <ThemedView style={styles.buttonContainer}>
+            <ThemedText style={styles.buttonText}>Continue</ThemedText>
+          </ThemedView>
+        </TouchableOpacity>
+      </Link>
     </>
   );
 }
+
+const styles = StyleSheet.create({
+  buttonContainer: {
+    position: "absolute",
+    bottom: 60,
+    alignSelf: "center",
+    backgroundColor: "#FFFFFF",
+    borderRadius: 7,
+  },
+  buttonText: {
+    color: "#000000",
+    fontSize: 25,
+    paddingHorizontal: 30,
+    paddingVertical: 10,
+  },
+  ListSpace: {
+    marginTop: 100,
+  },
+});
