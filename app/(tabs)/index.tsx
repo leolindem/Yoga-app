@@ -1,11 +1,15 @@
+import React, { useEffect } from "react";
 import { StyleSheet, SafeAreaView, FlatList } from "react-native";
 
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { WorkoutCard } from "@/components/WorkoutCard";
-import workoutDetails, { Workout } from "@/data/workoutData";
+import workoutDetails, { Workout, loadWorkouts } from "@/data/workoutData";
 
 export default function HomeScreen() {
+  useEffect(() => {
+    loadWorkouts();
+  }, []);
 
   const workoutArray: Workout[] = Object.values(workoutDetails);
   return (

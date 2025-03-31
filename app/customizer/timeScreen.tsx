@@ -1,14 +1,16 @@
-import { useState } from "react";
-import { Link, Stack, useLocalSearchParams } from "expo-router";
+import React, { useState } from "react";
+import { Link, Stack, useLocalSearchParams, useRouter } from "expo-router";
 import { StyleSheet, Image, TouchableOpacity } from "react-native";
 
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
+import workoutDetails, { saveWorkouts } from "@/data/workoutData";
 
 export default function StretchTimingScreen() {
   const { selectedStretches } = useLocalSearchParams() as {
     selectedStretches?: string;
   };
+  const router = useRouter();
   const stretches = selectedStretches
     ? JSON.parse(decodeURIComponent(selectedStretches))
     : {};
@@ -40,6 +42,35 @@ export default function StretchTimingScreen() {
     }));
   };
 
+  const saveWorkout = async () => {
+    // Calculate total duration
+    const totalSeconds = Object.values(timedStretchDict).reduce((a, b) => a + b, 0);
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = totalSeconds % 60;
+    const totalDuration = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+
+    // Create new workout object
+    const newWorkout = {
+      title: "Custom Workout",
+      totalDuration: totalDuration,
+      stretches: Object.entries(timedStretchDict).map(([name, duration]) => ({
+        name: name,
+        image: require("@/assets/images/lunge.png"), // Using default image for now
+        duration: duration,
+      })),
+    };
+
+    // Add new workout to workoutDetails
+    const newId = (Object.keys(workoutDetails).length + 1).toString();
+    workoutDetails[newId] = newWorkout;
+
+    // Save to AsyncStorage
+    await saveWorkouts();
+
+    // Navigate back to main screen
+    router.replace("/");
+  };
+
   return (
     <>
       <ThemedText type="title" style={styles.title}>
@@ -65,7 +96,7 @@ export default function StretchTimingScreen() {
           </ThemedView>
         </ThemedView>
       ))}
-      <TouchableOpacity>
+      <TouchableOpacity onPress={saveWorkout}>
         <ThemedView style={styles.buttonContainer}>
           <ThemedText style={styles.buttonText}>Save Workout</ThemedText>
         </ThemedView>
