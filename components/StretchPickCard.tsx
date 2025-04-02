@@ -1,3 +1,4 @@
+import React from "react";
 import { ThemedText } from "./ThemedText";
 import { ThemedView } from "./ThemedView";
 import {
@@ -8,7 +9,7 @@ import {
 
 type StrechCardProps = {
   title: string;
-  imagePath: string;
+  imagePath: number;
   selected: boolean;
 };
 
@@ -17,7 +18,7 @@ export function StretchPickCard({ title, imagePath, selected = false }: StrechCa
     <>
       <ThemedView style={!selected ? styles.card : styles.selectedCard }>
         <Image
-          source={require("@/assets/images/pose1.png")}
+          source={imagePath}
           style={styles.image}
         />
         <ThemedText type="defaultSemiBold" style={styles.stretchText}>

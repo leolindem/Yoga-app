@@ -1,6 +1,6 @@
 const workoutDetails: Record<string, any> = {
-  ["calf stretch"]: require("@/assets/images/lunge.png"),
-  ["hamstring"]: require("@/assets/images/lunge.png"),
+  ["Calf Stretch"]: require("@/assets/images/calf_stretch.png"),
+  ["Hamstring"]: require("@/assets/images/lunge.png"),
   ["forward fold"]: require("@/assets/images/lunge.png"),
   ["Piriformis "]: require("@/assets/images/lunge.png"),
   ["Hip Adductors"]: require("@/assets/images/lunge.png"),
