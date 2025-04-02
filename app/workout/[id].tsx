@@ -5,6 +5,7 @@ import { ThemedView } from "@/components/ThemedView";
 import { StyleSheet, Image, TouchableOpacity, Button } from "react-native";
 import { Bar as ProgressBar } from "react-native-progress";
 import workoutDetails from "@/data/workoutData";
+import React from "react";
 
 export default function WorkoutDetailScreen() {
   const { id } = useLocalSearchParams();

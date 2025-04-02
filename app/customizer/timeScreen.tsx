@@ -5,6 +5,7 @@ import { StyleSheet, Image, TouchableOpacity } from "react-native";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import workoutDetails, { saveWorkouts } from "@/data/workoutData";
+import stretchData from "@/data/stretchesData";
 
 export default function StretchTimingScreen() {
   const { selectedStretches } = useLocalSearchParams() as {
@@ -55,7 +56,7 @@ export default function StretchTimingScreen() {
       totalDuration: totalDuration,
       stretches: Object.entries(timedStretchDict).map(([name, duration]) => ({
         name: name,
-        image: require("@/assets/images/lunge.png"), // Using default image for now
+        image: stretchData[name],
         duration: duration,
       })),
     };

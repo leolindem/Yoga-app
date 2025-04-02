@@ -1,4 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import stretchesData from './stretchesData';
 
 export type Workout = {
   title: string;
@@ -67,7 +68,8 @@ export const loadWorkouts = async () => {
       Object.keys(parsedWorkouts).forEach(key => {
         parsedWorkouts[key].stretches.forEach((stretch: any) => {
           if (typeof stretch.image === 'string') {
-            stretch.image = require("@/assets/images/lunge.png"); // Default image
+            // Map the stored image name to the actual image from stretchesData
+            stretch.image = stretchesData[stretch.name] || require("@/assets/images/lunge.png");
           }
         });
       });
@@ -86,7 +88,8 @@ export const saveWorkouts = async () => {
     Object.keys(workoutsToSave).forEach(key => {
       workoutsToSave[key].stretches.forEach((stretch: any) => {
         if (typeof stretch.image === 'object') {
-          stretch.image = 'lunge.png'; // Store image name as string
+          // Store the stretch name as the image identifier
+          stretch.image = stretch.name;
         }
       });
     });
