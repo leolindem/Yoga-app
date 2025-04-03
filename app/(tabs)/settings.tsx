@@ -17,8 +17,8 @@ export default function TabTwoScreen() {
         </ThemedView>
         <ThemedText style={styles.streakNum}>0</ThemedText>
         <Link href={"/customizer" as Href} asChild>
-          <TouchableOpacity>
-            <ThemedText>Create your workout</ThemedText>
+          <TouchableOpacity style={styles.button}>
+            <ThemedText style={styles.buttonText}>Create your workout</ThemedText>
           </TouchableOpacity>
         </Link>
       </SafeAreaView>
@@ -29,7 +29,7 @@ export default function TabTwoScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center'
+    alignItems: "center",
   },
   title: {
     marginTop: 30,
@@ -41,6 +41,17 @@ const styles = StyleSheet.create({
   },
   streakContainer: {
     flex: 1,
-    justifyContent: 'center',
-  }
+    justifyContent: "center",
+  },
+  button: {
+    backgroundColor: "#FFFFFF", // White background
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+  },
+  buttonText: {
+    color: "#000000", // Black text for contrast
+    fontSize: 16,
+    paddingHorizontal: 80,
+  },
 });

@@ -88,7 +88,7 @@ export default function WorkoutDetailScreen() {
       <ThemedView style={styles.container}>
         <ThemedText type="title">{workout.title}</ThemedText>
         <Image
-          source={require("@/assets/images/pose1.png")}
+          source={workout.stretches[0].image}
           style={styles.details_img}
         />
         <TouchableOpacity onPress={() => {
