@@ -12,6 +12,8 @@ export default function HomeScreen() {
   }, []);
 
   const workoutArray: Workout[] = Object.values(workoutDetails);
+  console.log(workoutArray);
+
   return (
     <>
       <SafeAreaView style={styles.container}>
@@ -27,6 +29,7 @@ export default function HomeScreen() {
                 title={item.title}
                 time={item.totalDuration}
                 pathname={`/workout/${(index + 1).toString()}`}
+                image_url={item.stretches[0].image}
               />
             )}
             contentContainerStyle={styles.grid}

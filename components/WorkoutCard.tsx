@@ -14,6 +14,7 @@ type WorkoutCardProps = {
   title: string;
   time: string;
   pathname: string;
+  image_url: any;
 };
 
 export function WorkoutCard({
@@ -21,6 +22,7 @@ export function WorkoutCard({
   title,
   time,
   pathname,
+  image_url,
 }: WorkoutCardProps) {
   return (
     <>
@@ -28,7 +30,7 @@ export function WorkoutCard({
         <TouchableOpacity activeOpacity={0.7}>
           <ThemedView style={styles.card}>
             <Image
-              source={require("@/assets/images/pose1.png")}
+              source={image_url}
               style={styles.image}
             />
             <ThemedText type="defaultSemiBold" style={styles.stretchText}>

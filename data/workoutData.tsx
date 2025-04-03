@@ -17,8 +17,8 @@ const defaultWorkouts: Record<string, Workout> = {
     totalDuration: "2:00",
     stretches: [
       {
-        name: "Lunge",
-        image: require("@/assets/images/lunge.png"),
+        name: "Hamstring",
+        image: require("@/assets/images/hamstring.png"),
         duration: 10,
       },
       {
