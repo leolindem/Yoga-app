@@ -56,8 +56,9 @@ export default function StretchTimingScreen() {
       totalDuration: totalDuration,
       stretches: Object.entries(timedStretchDict).map(([name, duration]) => ({
         name: name,
-        image: stretchData[name],
+        image: stretchData[name][0],
         duration: duration,
+        changeSide: stretchData[name][1]
       })),
     };
 

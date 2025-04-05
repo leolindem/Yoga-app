@@ -28,7 +28,7 @@ export default function CustomizerScreen() {
   const selectedStretchesParam = encodeURIComponent(
     JSON.stringify(selectedStretches)
   );
-
+  console.log(stretchArray)
   return (
     <>
       <ThemedText style={styles.title}>Choose the Stretches</ThemedText>
@@ -44,7 +44,7 @@ export default function CustomizerScreen() {
               <ThemedView>
                 <StretchPickCard
                   title={name}
-                  imagePath={imageUrl}
+                  imagePath={imageUrl[0]}
                   selected={selectedStretches[name] || false}
                 />
               </ThemedView>

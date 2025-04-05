@@ -8,6 +8,7 @@ export type Workout = {
     name: string;
     image: any;
     duration: number;
+    changeSide: boolean;
   }[];
 };
 
@@ -20,16 +21,19 @@ const defaultWorkouts: Record<string, Workout> = {
         name: "Hamstring",
         image: require("@/assets/images/hamstring.png"),
         duration: 10,
+        changeSide: true,
       },
       {
         name: "Hamstring Stretch",
         image: require("@/assets/images/hamstring_stretch.png"),
         duration: 15,
+        changeSide: true
       },
       {
         name: "Shoulder Stretch",
         image: require("@/assets/images/shoulder_stretch.png"),
         duration: 10,
+        changeSide: true
       },
     ],
   },
@@ -41,16 +45,19 @@ const defaultWorkouts: Record<string, Workout> = {
         name: "Lunge",
         image: require("@/assets/images/lunge.png"),
         duration: 10,
+        changeSide: true,
       },
       {
         name: "Hamstring Stretch",
         image: require("@/assets/images/hamstring_stretch.png"),
         duration: 15,
+        changeSide: true
       },
       {
         name: "Shoulder Stretch",
         image: require("@/assets/images/shoulder_stretch.png"),
         duration: 10,
+        changeSide: true
       },
     ],
   },
