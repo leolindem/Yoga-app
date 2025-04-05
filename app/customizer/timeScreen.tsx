@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, Stack, useLocalSearchParams, useRouter } from "expo-router";
-import { StyleSheet, Image, TouchableOpacity } from "react-native";
+import { StyleSheet, Image, TouchableOpacity, ScrollView } from "react-native";
 
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
@@ -78,26 +78,33 @@ export default function StretchTimingScreen() {
       <ThemedText type="title" style={styles.title}>
         Selected Stretches
       </ThemedText>
-      {Object.entries(timedStretchDict).map(([name, duration]) => (
-        <ThemedView key={name} style={styles.strechContainer}>
-          <ThemedText style={styles.stretchText}>{`${name}`}</ThemedText>
-          <ThemedView style={styles.timeContainer}>
-            <TouchableOpacity onPress={() => timeMinus(name)}>
-              <Image
-                source={require("@/assets/images/minus-white.png")}
-                style={styles.images}
-              ></Image>
-            </TouchableOpacity>
-            <ThemedText style={styles.timeDigits}>{duration}s</ThemedText>
-            <TouchableOpacity onPress={() => timePlus(name)}>
-              <Image
-                source={require("@/assets/images/plus-symbol-white.png")}
-                style={styles.images}
-              ></Image>
-            </TouchableOpacity>
+
+      <ScrollView
+        style={{ flex: 1 }}
+        contentContainerStyle={styles.scrollContent}
+      >
+        {Object.entries(timedStretchDict).map(([name, duration]) => (
+          <ThemedView key={name} style={styles.strechContainer}>
+            <ThemedText style={styles.stretchText}>{`${name}`}</ThemedText>
+            <ThemedView style={styles.timeContainer}>
+              <TouchableOpacity onPress={() => timeMinus(name)}>
+                <Image
+                  source={require("@/assets/images/minus-white.png")}
+                  style={styles.images}
+                />
+              </TouchableOpacity>
+              <ThemedText style={styles.timeDigits}>{duration}s</ThemedText>
+              <TouchableOpacity onPress={() => timePlus(name)}>
+                <Image
+                  source={require("@/assets/images/plus-symbol-white.png")}
+                  style={styles.images}
+                />
+              </TouchableOpacity>
+            </ThemedView>
           </ThemedView>
-        </ThemedView>
-      ))}
+        ))}
+      </ScrollView>
+
       <TouchableOpacity onPress={saveWorkout}>
         <ThemedView style={styles.buttonContainer}>
           <ThemedText style={styles.buttonText}>Save Workout</ThemedText>
@@ -150,5 +157,9 @@ const styles = StyleSheet.create({
     fontSize: 25,
     paddingHorizontal: 30,
     paddingVertical: 10,
-  }
+  },
+  scrollContent: {
+    paddingBottom: 20, // makes room for the button below
+    paddingHorizontal: 16,
+  },
 });
