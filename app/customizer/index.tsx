@@ -31,7 +31,7 @@ export default function CustomizerScreen() {
 
   return (
     <>
-      <ThemedText>Choose the Stretches</ThemedText>
+      <ThemedText style={styles.title}>Choose the Stretches</ThemedText>
       <FlatList
         data={stretchArray}
         keyExtractor={([name]) => name}
@@ -53,23 +53,35 @@ export default function CustomizerScreen() {
         }}
       />
       <ThemedView style={styles.ListSpace}></ThemedView>
-      <Link
-        href={
-          `/customizer/timeScreen?selectedStretches=${selectedStretchesParam}` as Href
-        }
-        asChild
-      >
-        <TouchableOpacity>
-          <ThemedView style={styles.buttonContainer}>
-            <ThemedText style={styles.buttonText}>Continue</ThemedText>
-          </ThemedView>
-        </TouchableOpacity>
-      </Link>
+      {Object.values(selectedStretches).filter(Boolean).length > 0 ? (
+        <Link
+          href={
+            `/customizer/timeScreen?selectedStretches=${selectedStretchesParam}` as Href
+          }
+          asChild
+        >
+          <TouchableOpacity>
+            <ThemedView style={styles.buttonContainer}>
+              <ThemedText style={styles.buttonText}>Continue</ThemedText>
+            </ThemedView>
+          </TouchableOpacity>
+        </Link>
+      ) : (
+        <ThemedView style={styles.disabledButtonContainer}>
+          <ThemedText style={styles.disabledButtonText}>Continue</ThemedText>
+        </ThemedView>
+      )}
     </>
   );
 }
 
 const styles = StyleSheet.create({
+  title: {
+    alignSelf: "center",
+    marginTop: 20,
+    fontSize: 30,
+    lineHeight: 30,
+  },
   buttonContainer: {
     position: "absolute",
     bottom: 60,
@@ -80,6 +92,20 @@ const styles = StyleSheet.create({
   buttonText: {
     color: "#000000",
     fontSize: 25,
+    paddingHorizontal: 30,
+    paddingVertical: 10,
+  },
+  disabledButtonContainer: {
+    position: "absolute",
+    bottom: 60,
+    alignSelf: "center",
+    backgroundColor: "#c9c7c7",
+    borderRadius: 7,
+  },
+  disabledButtonText: {
+    color: "#575757",
+    fontSize: 25,
+    lineHeight: 25,
     paddingHorizontal: 30,
     paddingVertical: 10,
   },
