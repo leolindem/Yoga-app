@@ -16,25 +16,23 @@ export default function HomeScreen() {
 
   return (
     <>
-      <SafeAreaView style={styles.container}>
-        <ThemedView style={styles.container}>
-          <ThemedText type="title">Good Stretch</ThemedText>
-          <FlatList
-            data={workoutArray}
-            keyExtractor={(item, index) => index.toString()}
-            numColumns={2}
-            columnWrapperStyle={{ justifyContent: "space-between", gap: 16 }}
-            renderItem={({ item, index }) => (
-              <WorkoutCard
-                title={item.title}
-                time={item.totalDuration}
-                pathname={`/workout/${(index + 1).toString()}`}
-                image_url={item.stretches[0].image}
-              />
-            )}
-            contentContainerStyle={styles.grid}
-          />
-        </ThemedView>
+      <SafeAreaView style={styles.safeArea}>
+        <ThemedText type="title" style={styles.container}>Good Stretch</ThemedText>
+        <FlatList
+          data={workoutArray}
+          keyExtractor={(item, index) => index.toString()}
+          numColumns={2}
+          columnWrapperStyle={{ justifyContent: "space-between", gap: 16 }}
+          renderItem={({ item, index }) => (
+            <WorkoutCard
+              title={item.title}
+              time={item.totalDuration}
+              pathname={`/workout/${(index + 1).toString()}`}
+              image_url={item.stretches[0].image}
+            />
+          )}
+          contentContainerStyle={styles.grid}
+        />
       </SafeAreaView>
     </>
   );
@@ -45,13 +43,11 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   container: {
-    flex: 1,
     justifyContent: "flex-start",
-    alignItems: "center",
-    paddingTop: 50,
+    alignSelf: "center",
+    paddingTop: 20,
   },
   grid: {
-    paddingVertical: 20,
-    flex: 1,
+    paddingBottom: 50,
   },
 });
