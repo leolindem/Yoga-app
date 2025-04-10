@@ -25,7 +25,13 @@ export default function WorkoutDetailScreen() {
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
-    if (paused || currentStretchIndex >= totalStretches || !started || !countdownFinished) return;
+    if (
+      paused ||
+      currentStretchIndex >= totalStretches ||
+      !started ||
+      !countdownFinished
+    )
+      return;
 
     intervalRef.current = setInterval(() => {
       setSeconds((prevSeconds) => {
@@ -87,18 +93,16 @@ export default function WorkoutDetailScreen() {
     return (
       <ThemedView style={styles.container}>
         <ThemedText type="title">{workout.title}</ThemedText>
-        <Image
-          source={workout.stretches[0].image}
-          style={styles.details_img}
-        />
-        <TouchableOpacity onPress={() => {
-          setCountdown(3)
-          setStarted(true);
-          setCountdownFinished(false);
-        }}
-        style={styles.button}
+        <Image source={workout.stretches[0].image} style={styles.details_img} />
+        <TouchableOpacity
+          onPress={() => {
+            setCountdown(3);
+            setStarted(true);
+            setCountdownFinished(false);
+          }}
+          style={styles.button}
         >
-        <ThemedText style={styles.buttonText}>Start Workout</ThemedText>
+          <ThemedText style={styles.buttonText}>Start Workout</ThemedText>
         </TouchableOpacity>
       </ThemedView>
     );
@@ -108,7 +112,7 @@ export default function WorkoutDetailScreen() {
       <ThemedView style={styles.countdown_container}>
         <ThemedText style={styles.countdown}>{countdown}</ThemedText>
       </ThemedView>
-    )
+    );
   }
 
   return (
