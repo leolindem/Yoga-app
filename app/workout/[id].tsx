@@ -5,6 +5,7 @@ import { ThemedView } from "@/components/ThemedView";
 import { StyleSheet, Image, TouchableOpacity, Button } from "react-native";
 import { Bar as ProgressBar } from "react-native-progress";
 import workoutDetails from "@/data/workoutData";
+import { ChangeSymbol } from "@/components/ui/ChangeSymbol";
 import React from "react";
 
 export default function WorkoutDetailScreen() {
@@ -131,13 +132,28 @@ export default function WorkoutDetailScreen() {
               source={workout.stretches[currentStretchIndex].image}
               style={styles.image}
             />
-            <ProgressBar
-              width={300}
-              height={20}
-              color="white"
-              borderRadius={20}
-              progress={progress}
-            />
+            {workout.stretches[currentStretchIndex].changeSide ? (
+              <ThemedView style={styles.progressContainer}>
+                <ProgressBar
+                  width={300}
+                  height={20}
+                  color="white"
+                  borderRadius={20}
+                  progress={progress}
+                  style={styles.progressBar}
+                />
+                <ChangeSymbol style={styles.ChangeSymbolStyle} />
+              </ThemedView>
+            ) : (
+              <ProgressBar
+                width={300}
+                height={20}
+                color="white"
+                borderRadius={20}
+                progress={progress}
+              />
+            )}
+
             <ThemedText type="title" style={{ marginTop: 30 }}>
               {seconds}s
             </ThemedText>
@@ -268,4 +284,22 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     lineHeight: 150,
   },
+  progressContainer: {
+    position: 'relative',
+    marginTop: 20,
+    width: 300,
+    height: 20,
+  },
+  progressBar: {
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
+  },
+  ChangeSymbolStyle: {
+    position: 'absolute',
+    top: -13,
+    left: '46%',
+    transform: [{ translateX: -10 }],
+    zIndex: 2,
+  }
 });

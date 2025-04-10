@@ -20,14 +20,14 @@ const defaultWorkouts: Record<string, Workout> = {
       {
         name: "Hamstring",
         image: require("@/assets/images/hamstring.png"),
-        duration: 10,
+        duration: 100000000,
         changeSide: true,
       },
       {
         name: "Forward Bend",
         image: require("@/assets/images/forward_bend.png"),
         duration: 15,
-        changeSide: true
+        changeSide: false
       },
       {
         name: "Shoulder Stretch",
