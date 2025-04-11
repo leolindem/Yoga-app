@@ -28,7 +28,6 @@ export default function CustomizerScreen() {
   const selectedStretchesParam = encodeURIComponent(
     JSON.stringify(selectedStretches)
   );
-  console.log(stretchArray)
   return (
     <>
       <ThemedText style={styles.title}>Choose the Stretches</ThemedText>

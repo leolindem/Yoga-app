@@ -12,7 +12,6 @@ export default function HomeScreen() {
   }, []);
 
   const workoutArray: Workout[] = Object.values(workoutDetails);
-  console.log(workoutArray);
 
   return (
     <>

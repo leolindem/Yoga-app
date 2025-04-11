@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
-import { StyleSheet, Image, TouchableOpacity, Button } from "react-native";
+import { StyleSheet, Image, TouchableOpacity } from "react-native";
 import { Bar as ProgressBar } from "react-native-progress";
 import workoutDetails from "@/data/workoutData";
 import { ChangeSymbol } from "@/components/ui/ChangeSymbol";
@@ -19,23 +19,70 @@ export default function WorkoutDetailScreen() {
   const [seconds, setSeconds] = useState(workout.stretches[0].duration);
   const [progress, setProgress] = useState(0);
   const [paused, setPaused] = useState(false);
+  const [isChangingSides, setIsChangingSides] = useState(false);
+  const [changeSidesCountdown, setChangeSidesCountdown] = useState(5);
+  const [hasChangedSides, setHasChangedSides] = useState(false);
   const totalStretches = workout.stretches.length;
   const pauseIcon = require("@/assets/images/pause_white.png");
   const playIcon = require("@/assets/images/play_white.png");
 
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const changeSidesIntervalRef = useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    if (isChangingSides) {
+      changeSidesIntervalRef.current = setInterval(() => {
+        setChangeSidesCountdown((prev) => {
+          if (prev <= 1) {
+            setIsChangingSides(false);
+            setChangeSidesCountdown(5);
+            if (intervalRef.current) {
+              clearInterval(intervalRef.current);
+              intervalRef.current = null;
+            }
+            return 5;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+
+      return () => {
+        if (changeSidesIntervalRef.current) {
+          clearInterval(changeSidesIntervalRef.current);
+          changeSidesIntervalRef.current = null;
+        }
+      };
+    }
+  }, [isChangingSides]);
 
   useEffect(() => {
     if (
       paused ||
       currentStretchIndex >= totalStretches ||
       !started ||
-      !countdownFinished
+      !countdownFinished ||
+      isChangingSides
     )
       return;
 
+    const currentStretch = workout.stretches[currentStretchIndex];
+    const halfDuration = Math.floor(currentStretch.duration / 2);
+
     intervalRef.current = setInterval(() => {
       setSeconds((prevSeconds) => {
+        if (
+          prevSeconds === halfDuration &&
+          currentStretch.changeSide &&
+          !isChangingSides &&
+          !hasChangedSides
+        ) {
+          setIsChangingSides(true);
+          setHasChangedSides(true);
+          clearInterval(intervalRef.current!);
+          intervalRef.current = null;
+          return prevSeconds;
+        }
+
         if (prevSeconds > 0) return prevSeconds - 1;
 
         if (currentStretchIndex < totalStretches - 1) {
@@ -43,25 +90,46 @@ export default function WorkoutDetailScreen() {
           return workout.stretches[currentStretchIndex + 1].duration;
         } else {
           clearInterval(intervalRef.current!);
+          intervalRef.current = null;
           setCurrentStretchIndex(totalStretches);
           return 0;
         }
       });
 
-      setProgress((prevProgress) =>
-        prevProgress >= 1
-          ? 0
-          : prevProgress + 1 / workout.stretches[currentStretchIndex].duration
-      );
+      setProgress((prevProgress) => {
+        const newProgress = prevProgress + 1 / currentStretch.duration;
+        if (
+          newProgress >= 0.5 &&
+          currentStretch.changeSide &&
+          !isChangingSides &&
+          !hasChangedSides
+        ) {
+          return 0.5;
+        }
+        return newProgress >= 1 ? 0 : newProgress;
+      });
     }, 1000);
 
-    return () => clearInterval(intervalRef.current!);
-  }, [currentStretchIndex, paused, started, countdown]);
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
+      }
+    };
+  }, [
+    currentStretchIndex,
+    paused,
+    started,
+    countdown,
+    isChangingSides,
+    hasChangedSides,
+  ]);
 
   useEffect(() => {
     if (currentStretchIndex < totalStretches) {
       setProgress(0);
       setSeconds(workout.stretches[currentStretchIndex].duration);
+      setHasChangedSides(false);
     }
   }, [currentStretchIndex]);
 
@@ -90,6 +158,7 @@ export default function WorkoutDetailScreen() {
       intervalRef.current = null;
     }
   };
+
   if (!started) {
     return (
       <ThemedView style={styles.container}>
@@ -154,36 +223,64 @@ export default function WorkoutDetailScreen() {
               />
             )}
 
-            <ThemedText type="title" style={{ marginTop: 30 }}>
-              {seconds}s
-            </ThemedText>
+            {isChangingSides ? (
+              <ThemedView style={styles.changeSidesContainer}>
+                <ThemedText type="title" style={styles.changeSidesText}>
+                  Change Sides
+                </ThemedText>
+                <ThemedText type="title" style={styles.changeSidesCountdown}>
+                  {changeSidesCountdown}s
+                </ThemedText>
+              </ThemedView>
+            ) : (
+              <ThemedText type="title" style={{ marginTop: 30 }}>
+                {seconds}s
+              </ThemedText>
+            )}
+
             <ThemedView style={styles.controlButtonsContainer}>
               <TouchableOpacity
                 onPress={() => {
-                  if (currentStretchIndex > 0) {
+                  if (currentStretchIndex > 0 && !isChangingSides) {
                     setCurrentStretchIndex(currentStretchIndex - 1);
                   }
                 }}
+                disabled={isChangingSides}
               >
                 <Image
                   source={require("@/assets/images/back_white.png")}
-                  style={styles.controlButtons}
+                  style={[
+                    styles.controlButtons,
+                    isChangingSides && styles.disabledButton,
+                  ]}
                 />
               </TouchableOpacity>
-              <TouchableOpacity onPress={togglePause}>
+              <TouchableOpacity
+                onPress={togglePause}
+                disabled={isChangingSides}
+              >
                 <Image
                   source={paused ? playIcon : pauseIcon}
-                  style={styles.pauseButton}
+                  style={[
+                    styles.pauseButton,
+                    isChangingSides && styles.disabledButton,
+                  ]}
                 />
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => {
-                  setCurrentStretchIndex(currentStretchIndex + 1);
+                  if (!isChangingSides) {
+                    setCurrentStretchIndex(currentStretchIndex + 1);
+                  }
                 }}
+                disabled={isChangingSides}
               >
                 <Image
                   source={require("@/assets/images/skip_white.png")}
-                  style={styles.controlButtons}
+                  style={[
+                    styles.controlButtons,
+                    isChangingSides && styles.disabledButton,
+                  ]}
                 />
               </TouchableOpacity>
             </ThemedView>
@@ -285,21 +382,37 @@ const styles = StyleSheet.create({
     lineHeight: 150,
   },
   progressContainer: {
-    position: 'relative',
+    position: "relative",
     marginTop: 20,
     width: 300,
     height: 20,
   },
   progressBar: {
-    position: 'absolute',
-    width: '100%',
-    height: '100%',
+    position: "absolute",
+    width: "100%",
+    height: "100%",
   },
   ChangeSymbolStyle: {
-    position: 'absolute',
+    position: "absolute",
     top: -13,
-    left: '46%',
+    left: "46%",
     transform: [{ translateX: -10 }],
     zIndex: 2,
-  }
+  },
+  changeSidesContainer: {
+    marginTop: 30,
+    alignItems: "center",
+  },
+  changeSidesText: {
+    lineHeight: 25,
+    fontSize: 24,
+    marginBottom: 10,
+  },
+  changeSidesCountdown: {
+    lineHeight: 36,
+    fontSize: 36,
+  },
+  disabledButton: {
+    opacity: 0.5,
+  },
 });

@@ -3,7 +3,7 @@ const workoutDetails: Record<string, any> = {
   ["Hamstring"]: [require("@/assets/images/hamstring.png"), true],
   ["forward fold"]: [require("@/assets/images/forward_bend.png"), false],
   ["Piriformis"]: [require("@/assets/images/piriformis.png"), true],
-  ["Child Pose"]: [require("@/assets/images/child_pose.png"), true],
+  ["Child Pose"]: [require("@/assets/images/child_pose.png"), false],
   ["Standing Calf"]: [require("@/assets/images/standing_calf_stretch.png"), true],
   ["Lunging Hip Flexor"]: [require("@/assets/images/lunging_hip_flexor.png"), true],
   ["Happy Baby"]: [require("@/assets/images/happy_baby.png"), false],
