@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { Link, Href } from "expo-router";
+import React from "react";
 
 type WorkoutCardProps = {
   style?: StyleProp<ViewStyle>;

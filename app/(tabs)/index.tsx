@@ -15,13 +15,13 @@ export default function HomeScreen() {
 
   return (
     <>
-      <SafeAreaView style={styles.safeArea}>
+      <SafeAreaView>
         <ThemedText type="title" style={styles.container}>Good Stretch</ThemedText>
         <FlatList
           data={workoutArray}
           keyExtractor={(item, index) => index.toString()}
           numColumns={2}
-          columnWrapperStyle={{ justifyContent: "space-between", gap: 16 }}
+          columnWrapperStyle={{ justifyContent: "space-between"}}
           renderItem={({ item, index }) => (
             <WorkoutCard
               title={item.title}
@@ -38,9 +38,6 @@ export default function HomeScreen() {
 }
 
 const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-  },
   container: {
     justifyContent: "flex-start",
     alignSelf: "center",
@@ -48,5 +45,7 @@ const styles = StyleSheet.create({
   },
   grid: {
     paddingBottom: 50,
+    marginTop: 35,
+    marginHorizontal: 10,
   },
 });

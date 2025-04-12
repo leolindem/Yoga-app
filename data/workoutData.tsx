@@ -38,7 +38,7 @@ const defaultWorkouts: Record<string, Workout> = {
     ],
   },
   "2": {
-    title: "End of day Stretch",
+    title: "End of day",
     totalDuration: "3:00",
     stretches: [
       {

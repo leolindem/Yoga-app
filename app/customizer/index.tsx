@@ -35,7 +35,7 @@ export default function CustomizerScreen() {
         data={stretchArray}
         keyExtractor={([name]) => name}
         numColumns={2}
-        columnWrapperStyle={{ justifyContent: "space-around" }}
+        columnWrapperStyle={{ justifyContent: "space-between" }}
         renderItem={({ item }) => {
           const [name, imageUrl] = item;
           return (
@@ -50,6 +50,7 @@ export default function CustomizerScreen() {
             </TouchableOpacity>
           );
         }}
+        contentContainerStyle={styles.ListStyle}
       />
       <ThemedView style={styles.ListSpace}></ThemedView>
       {Object.values(selectedStretches).filter(Boolean).length > 0 ? (
@@ -111,4 +112,7 @@ const styles = StyleSheet.create({
   ListSpace: {
     marginTop: 100,
   },
+  ListStyle : {
+    marginHorizontal: 5
+  }
 });
