@@ -1,39 +1,54 @@
-import React, { useEffect } from "react";
+import React, { useState, useCallback } from "react";
 import { StyleSheet, SafeAreaView, FlatList } from "react-native";
-
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { WorkoutCard } from "@/components/WorkoutCard";
-import workoutDetails, { Workout, loadWorkouts } from "@/data/workoutData";
+import { loadWorkouts, Workout } from "@/data/workoutData";
+import { useFocusEffect } from "expo-router";
 
 export default function HomeScreen() {
-  useEffect(() => {
-    loadWorkouts();
-  }, []);
+  const [workouts, setWorkouts] = useState<Record<string, Workout>>({});
 
-  const workoutArray: Workout[] = Object.values(workoutDetails);
+  useFocusEffect(
+    useCallback(() => {
+      const fetch = async () => {
+        const saved = await loadWorkouts();
+        setWorkouts(saved);
+      };
+      fetch();
+    }, [])
+  );
 
   return (
-    <>
-      <SafeAreaView style={styles.safeArea}>
-        <ThemedText type="title" style={styles.container}>Good Stretch</ThemedText>
-        <FlatList
-          data={workoutArray}
-          keyExtractor={(item, index) => index.toString()}
-          numColumns={2}
-          columnWrapperStyle={{ justifyContent: "space-between", gap: 16 }}
-          renderItem={({ item, index }) => (
+    <SafeAreaView style={styles.safeArea}>
+      <ThemedText type="title" style={styles.container}>
+        Good Stretch
+      </ThemedText>
+
+      <FlatList
+        data={Object.entries(workouts)}
+        keyExtractor={([id]) => id}
+        numColumns={2}
+        columnWrapperStyle={{ justifyContent: "space-between", gap: 16 }}
+        renderItem={({ item }) => {
+          const [id, workout] = item;
+          return (
             <WorkoutCard
-              title={item.title}
-              time={item.totalDuration}
-              pathname={`/workout/${(index + 1).toString()}`}
-              image_url={item.stretches[0].image}
+              title={workout.title}
+              time={workout.totalDuration}
+              pathname={`/workout/${id}`}
+              image_url={workout.stretches[0]?.image}
             />
-          )}
-          contentContainerStyle={styles.grid}
-        />
-      </SafeAreaView>
-    </>
+          );
+        }}
+        contentContainerStyle={styles.grid}
+        ListEmptyComponent={
+          <ThemedView style={styles.empty}>
+            <ThemedText>No saved workouts yet.</ThemedText>
+          </ThemedView>
+        }
+      />
+    </SafeAreaView>
   );
 }
 
@@ -48,5 +63,9 @@ const styles = StyleSheet.create({
   },
   grid: {
     paddingBottom: 50,
+  },
+  empty: {
+    marginTop: 40,
+    alignItems: "center",
   },
 });

@@ -44,13 +44,11 @@ export default function StretchTimingScreen() {
   };
 
   const saveWorkout = async () => {
-    // Calculate total duration
     const totalSeconds = Object.values(timedStretchDict).reduce((a, b) => a + b, 0);
     const minutes = Math.floor(totalSeconds / 60);
     const seconds = totalSeconds % 60;
     const totalDuration = `${minutes}:${seconds.toString().padStart(2, '0')}`;
 
-    // Create new workout object
     const newWorkout = {
       title: "Custom Workout",
       totalDuration: totalDuration,
@@ -58,18 +56,16 @@ export default function StretchTimingScreen() {
         name: name,
         image: stretchData[name][0],
         duration: duration,
-        changeSide: stretchData[name][1]
+        changeSide: stretchData[name][1],
       })),
     };
 
-    // Add new workout to workoutDetails
     const newId = (Object.keys(workoutDetails).length + 1).toString();
     workoutDetails[newId] = newWorkout;
 
-    // Save to AsyncStorage
-    await saveWorkouts();
+   
+    await saveWorkouts(workoutDetails);
 
-    // Navigate back to main screen
     router.replace("/");
   };
 
@@ -79,10 +75,7 @@ export default function StretchTimingScreen() {
         Selected Stretches
       </ThemedText>
 
-      <ScrollView
-        style={{ flex: 1 }}
-        contentContainerStyle={styles.scrollContent}
-      >
+      <ScrollView style={{ flex: 1 }} contentContainerStyle={styles.scrollContent}>
         {Object.entries(timedStretchDict).map(([name, duration]) => (
           <ThemedView key={name} style={styles.strechContainer}>
             <ThemedText style={styles.stretchText}>{`${name}`}</ThemedText>
@@ -159,7 +152,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
   },
   scrollContent: {
-    paddingBottom: 20, // makes room for the button below
+    paddingBottom: 20,
     paddingHorizontal: 16,
   },
 });

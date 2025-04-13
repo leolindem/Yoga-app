@@ -81,28 +81,33 @@ export const loadWorkouts = async () => {
         });
       });
       workoutDetails = parsedWorkouts;
+      return parsedWorkouts;
     }
+    return{};
   } catch (error) {
     console.error('Error loading workouts:', error);
+    return {};
   }
 };
 
 // Save workouts to AsyncStorage
-export const saveWorkouts = async () => {
+export const saveWorkouts = async (data?: Record<string, Workout>) => {
   try {
-    // Convert require statements to strings before saving
-    const workoutsToSave = { ...workoutDetails };
+    const toSave = data ?? workoutDetails;
+
+    const workoutsToSave = JSON.parse(JSON.stringify(toSave));
+
     Object.keys(workoutsToSave).forEach(key => {
       workoutsToSave[key].stretches.forEach((stretch: any) => {
-        if (typeof stretch.image === 'object') {
-          // Store the stretch name as the image identifier
-          stretch.image = stretch.name;
+        if (typeof stretch.image === "object") {
+          stretch.image = stretch.name; // Convert image to string
         }
       });
     });
-    await AsyncStorage.setItem('workouts', JSON.stringify(workoutsToSave));
+
+    await AsyncStorage.setItem("workouts", JSON.stringify(workoutsToSave));
   } catch (error) {
-    console.error('Error saving workouts:', error);
+    console.error("Error saving workouts:", error);
   }
 };
 
