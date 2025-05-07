@@ -119,6 +119,7 @@ const styles = StyleSheet.create({
     marginTop: 50,
     flexDirection: "row",
     justifyContent: "space-between",
+    width: '100%'
   },
   timeContainer: {
     flexDirection: "row",
@@ -130,7 +131,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   stretchText: {
-    marginLeft: 20,
+    marginLeft: 0,
     fontSize: 20,
     lineHeight: 20,
     fontWeight: "bold",
