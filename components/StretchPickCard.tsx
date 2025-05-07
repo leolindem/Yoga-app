@@ -32,15 +32,17 @@ export function StretchPickCard({ title, imagePath, selected = false }: StrechCa
 const styles = StyleSheet.create({
   card: {
     alignItems: "center",
-    margin: 20,
+    marginHorizontal: 5,
+    marginTop: 10,
     padding: 10,
     borderColor: "#343635",
     borderWidth: 1,
     borderRadius: 10,
   },
-  selectedCard : {
+  selectedCard: {
     alignItems: "center",
-    margin: 20,
+    marginHorizontal: 5,
+    marginTop: 10,
     padding: 10,
     borderColor: "#2ee866",
     borderWidth: 1,
