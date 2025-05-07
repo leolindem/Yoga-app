@@ -53,14 +53,13 @@ const styles = StyleSheet.create({
     borderColor: "#343635",
     borderWidth: 1,
     borderRadius: 10,
-
+    width: 150
   },
   image: {
-    width: 100,
-    height: 80,
+    width: '100%',
+    height: 110,
     resizeMode: "cover",
     borderRadius: 10,
-    marginHorizontal: 25,
   },
   stretchText: {
     marginTop: 10,

@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
     paddingTop: 20,
   },
   grid: {
-    paddingBottom: 50,
+    paddingBottom: 150,
     marginTop: 35,
     marginHorizontal: 10,
   },
