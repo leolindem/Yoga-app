@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { Link, Stack, useLocalSearchParams, useRouter } from "expo-router";
-import { StyleSheet, Image, TouchableOpacity, ScrollView } from "react-native";
+import { useLocalSearchParams, useRouter } from "expo-router";
+import { StyleSheet, Image, TouchableOpacity, ScrollView, Modal, TextInput } from "react-native";
 
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
@@ -28,6 +28,8 @@ export default function StretchTimingScreen() {
     });
     return initialDict;
   });
+
+  const [modalVisible, setModalVisible] = useState(true);
 
   const timeMinus = (stretchName: string) => {
     setTimedStretchDict((prevDict) => ({
@@ -110,6 +112,22 @@ export default function StretchTimingScreen() {
           <ThemedText style={styles.buttonText}>Save Workout</ThemedText>
         </ThemedView>
       </TouchableOpacity>
+      <Modal 
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          setModalVisible(!modalVisible);
+        }}
+      >
+        <ThemedView style={styles.centeredView}>
+          <ThemedView style={styles.modalContent}>
+            <ThemedText style={{color:"#000000"}}>Name the workout</ThemedText>
+            <TextInput
+              keyboardType="default"
+            ></TextInput>
+          </ThemedView>
+        </ThemedView>
+      </Modal>
     </>
   );
 }
@@ -163,4 +181,26 @@ const styles = StyleSheet.create({
     paddingBottom: 20, // makes room for the button below
     paddingHorizontal: 16,
   },
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  modalContent: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 20,
+    padding: 20,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+    width: '80%',
+    maxWidth: 300,
+  }
 });
