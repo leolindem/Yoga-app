@@ -1,6 +1,16 @@
 import React, { useState } from "react";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { StyleSheet, Image, TouchableOpacity, ScrollView, Modal, TextInput } from "react-native";
+import {
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  ScrollView,
+  Modal,
+  TextInput,
+  Keyboard,
+  TouchableWithoutFeedback,
+  Button,
+} from "react-native";
 
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
@@ -29,7 +39,8 @@ export default function StretchTimingScreen() {
     return initialDict;
   });
 
-  const [modalVisible, setModalVisible] = useState(true);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [name, setName] = useState("");
 
   const timeMinus = (stretchName: string) => {
     setTimedStretchDict((prevDict) => ({
@@ -47,20 +58,23 @@ export default function StretchTimingScreen() {
 
   const saveWorkout = async () => {
     // Calculate total duration
-    const totalSeconds = Object.values(timedStretchDict).reduce((a, b) => a + b, 0);
+    const totalSeconds = Object.values(timedStretchDict).reduce(
+      (a, b) => a + b,
+      0
+    );
     const minutes = Math.floor(totalSeconds / 60);
     const seconds = totalSeconds % 60;
-    const totalDuration = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+    const totalDuration = `${minutes}:${seconds.toString().padStart(2, "0")}`;
 
     // Create new workout object
     const newWorkout = {
-      title: "Custom Workout",
+      title: name,
       totalDuration: totalDuration,
       stretches: Object.entries(timedStretchDict).map(([name, duration]) => ({
         name: name,
         image: stretchData[name][0],
         duration: duration,
-        changeSide: stretchData[name][1]
+        changeSide: stretchData[name][1],
       })),
     };
 
@@ -107,26 +121,50 @@ export default function StretchTimingScreen() {
         ))}
       </ScrollView>
 
-      <TouchableOpacity onPress={saveWorkout}>
+      <TouchableOpacity
+        onPress={() => {
+          setModalVisible(true);
+        }}
+      >
         <ThemedView style={styles.buttonContainer}>
           <ThemedText style={styles.buttonText}>Save Workout</ThemedText>
         </ThemedView>
       </TouchableOpacity>
-      <Modal 
+      <Modal
         transparent={true}
         visible={modalVisible}
         onRequestClose={() => {
           setModalVisible(!modalVisible);
         }}
       >
-        <ThemedView style={styles.centeredView}>
-          <ThemedView style={styles.modalContent}>
-            <ThemedText style={{color:"#000000"}}>Name the workout</ThemedText>
-            <TextInput
-              keyboardType="default"
-            ></TextInput>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <ThemedView style={styles.centeredView}>
+            <ThemedView style={styles.modalContent}>
+              <ThemedText style={{ color: "#000000" }}>
+                Name the workout
+              </ThemedText>
+              <TextInput
+                keyboardType="default"
+                placeholder="Workout Name"
+                placeholderTextColor={"#000000"}
+                style={styles.input}
+                onChangeText={setName}
+              ></TextInput>
+              <ThemedView style={styles.modalButtonsContainer}>
+                <TouchableOpacity
+                  onPress={() => {
+                    setModalVisible(false);
+                  }}
+                >
+                  <ThemedText style={styles.modalButtonText}>Cancel</ThemedText>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={saveWorkout}>
+                  <ThemedText style={styles.modalButtonText}>Accept</ThemedText>
+                </TouchableOpacity>
+              </ThemedView>
+            </ThemedView>
           </ThemedView>
-        </ThemedView>
+        </TouchableWithoutFeedback>
       </Modal>
     </>
   );
@@ -137,7 +175,7 @@ const styles = StyleSheet.create({
     marginTop: 50,
     flexDirection: "row",
     justifyContent: "space-between",
-    width: '100%'
+    width: "100%",
   },
   timeContainer: {
     flexDirection: "row",
@@ -183,16 +221,16 @@ const styles = StyleSheet.create({
   },
   centeredView: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
   modalContent: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: "#FFFFFF",
     borderRadius: 20,
     padding: 20,
-    alignItems: 'center',
-    shadowColor: '#000',
+    alignItems: "center",
+    shadowColor: "#000",
     shadowOffset: {
       width: 0,
       height: 2,
@@ -200,7 +238,30 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
-    width: '80%',
+    width: "80%",
     maxWidth: 300,
-  }
+  },
+  input: {
+    borderWidth: 1,
+    height: 50,
+    padding: 10,
+    width: "100%",
+    marginTop: 20,
+    borderRadius: 5,
+  },
+  modalButtonsContainer: {
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+    marginTop: 20,
+    width: "100%",
+    backgroundColor: "#FFFFFF",
+  },
+  modalButtonText: {
+    color: "#007AFF",
+    fontSize: 20,
+    fontWeight: 'bold'
+  },
+  modalButton: {
+    height: "20%",
+  },
 });
