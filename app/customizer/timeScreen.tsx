@@ -9,7 +9,6 @@ import {
   TextInput,
   Keyboard,
   TouchableWithoutFeedback,
-  Button,
 } from "react-native";
 
 import { ThemedText } from "@/components/ThemedText";
@@ -140,13 +139,14 @@ export default function StretchTimingScreen() {
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <ThemedView style={styles.centeredView}>
             <ThemedView style={styles.modalContent}>
-              <ThemedText style={{ color: "#000000" }}>
+              <ThemedText style={{ color: "#000000", fontWeight: "bold" }}>
                 Name the workout
               </ThemedText>
               <TextInput
                 keyboardType="default"
                 placeholder="Workout Name"
-                placeholderTextColor={"#000000"}
+                placeholderTextColor={"#55565B"}
+                maxLength={10}
                 style={styles.input}
                 onChangeText={setName}
               ></TextInput>
@@ -251,15 +251,15 @@ const styles = StyleSheet.create({
   },
   modalButtonsContainer: {
     flexDirection: "row",
-    justifyContent: "space-evenly",
+    justifyContent: "space-between",
     marginTop: 20,
-    width: "100%",
+    width: "90%",
     backgroundColor: "#FFFFFF",
   },
   modalButtonText: {
     color: "#007AFF",
     fontSize: 20,
-    fontWeight: 'bold'
+    // fontWeight: 'bold'
   },
   modalButton: {
     height: "20%",
