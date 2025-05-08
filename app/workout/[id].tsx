@@ -26,8 +26,8 @@ export default function WorkoutDetailScreen() {
   const pauseIcon = require("@/assets/images/pause_white.png");
   const playIcon = require("@/assets/images/play_white.png");
 
-  const intervalRef = useRef<NodeJS.Timeout | null>(null);
-  const changeSidesIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const intervalRef = useRef<number | null>(null);
+  const changeSidesIntervalRef = useRef<number | null>(null);
 
   useEffect(() => {
     if (isChangingSides) {
