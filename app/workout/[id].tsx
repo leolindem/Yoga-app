@@ -7,6 +7,7 @@ import { Bar as ProgressBar } from "react-native-progress";
 import workoutDetails from "@/data/workoutData";
 import { ChangeSymbol } from "@/components/ui/ChangeSymbol";
 import React from "react";
+import { updateStreak } from "@/data/streakData";
 
 export default function WorkoutDetailScreen() {
   const { id } = useLocalSearchParams();
@@ -25,6 +26,7 @@ export default function WorkoutDetailScreen() {
   const totalStretches = workout.stretches.length;
   const pauseIcon = require("@/assets/images/pause_white.png");
   const playIcon = require("@/assets/images/play_white.png");
+  const [currentStreak, setCurrentStreak] = useState(0);
 
   const intervalRef = useRef<number | null>(null);
   const changeSidesIntervalRef = useRef<number | null>(null);
@@ -148,6 +150,14 @@ export default function WorkoutDetailScreen() {
       return () => clearInterval(timer);
     }
   }, [started, countdown]);
+
+  useEffect(() => {
+    if (currentStretchIndex >= totalStretches) {
+      updateStreak().then(newStreak => {
+        setCurrentStreak(newStreak);
+      });
+    }
+  }, [currentStretchIndex]);
 
   const togglePause = () => {
     setPaused((prev) => !prev);
@@ -289,6 +299,7 @@ export default function WorkoutDetailScreen() {
       ) : (
         <ThemedView style={styles.done}>
           <ThemedText type="title">Workout Done!</ThemedText>
+          <ThemedText style={styles.streakText}>Current Streak: {currentStreak}</ThemedText>
           <ThemedView style={styles.doneButton}>
             <TouchableOpacity
               style={styles.button}
@@ -414,5 +425,9 @@ const styles = StyleSheet.create({
   },
   disabledButton: {
     opacity: 0.5,
+  },
+  streakText: {
+    fontSize: 24,
+    marginTop: 20,
   },
 });

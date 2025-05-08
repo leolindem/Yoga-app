@@ -1,21 +1,40 @@
 import { StyleSheet, SafeAreaView, TouchableOpacity } from 'react-native';
 import { Link, Href } from "expo-router";
+import { useEffect, useState } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
 
-import { Collapsible } from '@/components/Collapsible';
-import { ExternalLink } from '@/components/ExternalLink';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
-import { IconSymbol } from '@/components/ui/IconSymbol';
+import { getStreakData } from '@/data/streakData';
+import React from 'react';
 
 export default function TabTwoScreen() {
+  const [currentStreak, setCurrentStreak] = useState(0);
+
+  const loadStreak = async () => {
+    const streakData = await getStreakData();
+    setCurrentStreak(streakData.currentStreak);
+  };
+
+  // Load streak data when component mounts
+  useEffect(() => {
+    loadStreak();
+  }, []);
+
+  // Reload streak data when screen comes into focus
+  useFocusEffect(
+    React.useCallback(() => {
+      loadStreak();
+    }, [])
+  );
+
   return (
     <>
       <SafeAreaView style={styles.container}>
         <ThemedView style={styles.title}>
           <ThemedText type="title">Streaks</ThemedText>
         </ThemedView>
-        <ThemedText style={styles.streakNum}>0</ThemedText>
+        <ThemedText style={styles.streakNum}>{currentStreak}</ThemedText>
         <Link href={"/customizer" as Href} asChild>
           <TouchableOpacity style={styles.button}>
             <ThemedText style={styles.buttonText}>Create your workout</ThemedText>
@@ -29,10 +48,11 @@ export default function TabTwoScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center",
+    alignItems: 'center',
   },
   title: {
-    marginTop: 30,
+    marginTop: 50,
+    marginBottom: 20,
   },
   streakNum: {
     marginTop: 30,
@@ -44,13 +64,13 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   button: {
-    backgroundColor: "#FFFFFF", // White background
+    backgroundColor: "#FFFFFF",
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 5,
   },
   buttonText: {
-    color: "#000000", // Black text for contrast
+    color: "#000000",
     fontSize: 16,
     paddingHorizontal: 80,
   },
