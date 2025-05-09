@@ -48,12 +48,14 @@ export function WorkoutCard({
 const styles = StyleSheet.create({
   card: {
     alignItems: "center",
-    margin: 20,
+    // margin: 10,
+    marginBottom: 15,
     padding: 10,
     borderColor: "#343635",
     borderWidth: 1,
     borderRadius: 10,
-    width: 150
+    width: 160,
+    height: 200,
   },
   image: {
     width: '100%',
