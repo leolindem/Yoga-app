@@ -53,7 +53,9 @@ export default function RootLayout() {
             ),
           }}
         />
-        <Stack.Screen name="customizer" options={{}} />
+        <Stack.Screen name="customizer" options={{
+          headerBackTitle: "Back", title: "Custom Workout", headerBlurEffect: "light"
+        }} />
         <Stack.Screen name="+not-found" />
       </Stack>
       <StatusBar style="auto" />
