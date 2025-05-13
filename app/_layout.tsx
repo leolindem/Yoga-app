@@ -1,4 +1,4 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
+import { DarkTheme, ThemeProvider } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
@@ -7,6 +7,7 @@ import { useEffect } from 'react';
 import 'react-native-reanimated';
 
 import { useColorScheme } from '@/hooks/useColorScheme';
+import { View } from 'react-native';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -35,10 +36,24 @@ export default function RootLayout() {
           name="workout/[id]"
           options={{
             presentation: "modal",
-            animation: "slide_from_bottom", // Ensures it slides from bottom
+            animation: "slide_from_bottom",
+            header: () => (
+              <View style={{ alignItems: "center", paddingTop: 10 }}>
+                <View
+                  style={{
+                    width: 60,
+                    height: 4,
+                    borderRadius: 2,
+                    backgroundColor: "#ccc",
+                    marginBottom: 0,
+                    marginTop: 10
+                  }}
+                />
+              </View>
+            ),
           }}
         />
-        <Stack.Screen name="customizer" />
+        <Stack.Screen name="customizer" options={{}} />
         <Stack.Screen name="+not-found" />
       </Stack>
       <StatusBar style="auto" />
