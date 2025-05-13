@@ -100,7 +100,7 @@ export default function StretchTimingScreen() {
       >
         {Object.entries(timedStretchDict).map(([name, duration]) => (
           <ThemedView key={name} style={styles.strechContainer}>
-            <ThemedText style={styles.stretchText}>{`${name}`}</ThemedText>
+            <Image source={stretchData[name][0]} style={styles.timeImage}/>
             <ThemedView style={styles.timeContainer}>
               <TouchableOpacity onPress={() => timeMinus(name)}>
                 <Image
@@ -179,7 +179,9 @@ const styles = StyleSheet.create({
     marginTop: 50,
     flexDirection: "row",
     justifyContent: "space-between",
+    alignItems: "center",
     width: "100%",
+    paddingLeft: 40
   },
   timeContainer: {
     flexDirection: "row",
@@ -267,4 +269,10 @@ const styles = StyleSheet.create({
   modalButton: {
     height: "20%",
   },
+  timeImage: {
+    width: 80,
+    height: 80,
+    resizeMode: 'contain',
+    borderRadius: 10
+  }
 });
