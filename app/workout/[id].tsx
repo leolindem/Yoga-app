@@ -10,6 +10,7 @@ import { ChangeSymbol } from "@/components/ui/ChangeSymbol";
 import { updateStreak } from "@/data/streakData";
 import { WorkoutFinished } from "@/components/WorkoutFinished";
 import { ControlButtons } from "@/components/ControlButtons";
+import { WorkoutDetails } from "@/components/WorkoutDetails";
 
 export default function WorkoutDetailScreen() {
   const { id } = useLocalSearchParams();
@@ -155,7 +156,7 @@ export default function WorkoutDetailScreen() {
 
   useEffect(() => {
     if (currentStretchIndex >= totalStretches) {
-      updateStreak().then(newStreak => {
+      updateStreak().then((newStreak) => {
         setCurrentStreak(newStreak);
       });
     }
@@ -173,20 +174,13 @@ export default function WorkoutDetailScreen() {
 
   if (!started) {
     return (
-      <ThemedView style={styles.container}>
-        <ThemedText type="title">{workout.title}</ThemedText>
-        <Image source={workout.stretches[0].image} style={styles.details_img} />
-        <TouchableOpacity
-          onPress={() => {
-            setCountdown(3);
-            setStarted(true);
-            setCountdownFinished(false);
-          }}
-          style={styles.button}
-        >
-          <ThemedText style={styles.buttonText}>Start Workout</ThemedText>
-        </TouchableOpacity>
-      </ThemedView>
+      <WorkoutDetails
+        title={workout.title}
+        image={workout.stretches[0].image}
+        setCountdown={setCountdown}
+        setStarted={setStarted}
+        setCountdownFinished={setCountdownFinished}
+      />
     );
   }
   if (countdown > 0) {
@@ -250,8 +244,8 @@ export default function WorkoutDetailScreen() {
               </ThemedText>
             )}
 
-            <ControlButtons 
-              currentStretchIndex={currentStretchIndex}  
+            <ControlButtons
+              currentStretchIndex={currentStretchIndex}
               isChangingSides={isChangingSides}
               setCurrentStretchIndex={setCurrentStretchIndex}
               togglePause={togglePause}
@@ -259,11 +253,10 @@ export default function WorkoutDetailScreen() {
               playIcon={playIcon}
               pauseIcon={pauseIcon}
             />
-
           </ThemedView>
         </ThemedView>
       ) : (
-        <WorkoutFinished currentStreak={currentStreak}/>
+        <WorkoutFinished currentStreak={currentStreak} />
       )}
     </>
   );
@@ -287,19 +280,19 @@ const styles = StyleSheet.create({
   },
   image: {
     width: 300,
-    height: '40%',
+    height: "40%",
     resizeMode: "cover",
     borderRadius: 150,
     marginBottom: 20,
   },
   button: {
-    backgroundColor: "#FFFFFF", // White background
+    backgroundColor: "#FFFFFF",
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 5,
   },
   buttonText: {
-    color: "#000000", // Black text for contrast
+    color: "#000000",
     fontSize: 16,
     paddingHorizontal: 80,
   },
@@ -307,7 +300,7 @@ const styles = StyleSheet.create({
     width: 200,
     height: 200,
     resizeMode: "cover",
-    marginTop: 50,
+    marginTop: 30,
     marginBottom: 30,
   },
   countdown_container: {

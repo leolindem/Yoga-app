@@ -52,10 +52,10 @@ const styles = StyleSheet.create({
   },
   title: {
     marginTop: 50,
-    marginBottom: 20,
+    marginBottom: 0,
   },
   streakNum: {
-    marginTop: 30,
+    marginTop: 10,
     fontSize: 150,
     lineHeight: 190,
   },

@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { StyleSheet, SafeAreaView, FlatList } from "react-native";
+import { StyleSheet, SafeAreaView, FlatList, Image } from "react-native";
 
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
@@ -16,7 +16,14 @@ export default function HomeScreen() {
   return (
     <>
       <SafeAreaView>
-        <ThemedText type="title" style={styles.container}>Good Stretch</ThemedText>
+          <Image
+            source={require("@/assets/images/Logo.png")}
+            style={styles.image}
+          ></Image>
+        {/* <ThemedText type="title" style={styles.container}>
+          Good Stretch
+        </ThemedText> */}
+
         <FlatList
           data={workoutArray}
           keyExtractor={(item, index) => index.toString()}
@@ -45,11 +52,18 @@ const styles = StyleSheet.create({
   },
   grid: {
     paddingBottom: 150,
-    marginTop: 35,
+    marginTop: 15,
     paddingHorizontal: 10,
   },
   columnWrapper: {
     justifyContent: "space-evenly",
     gap: 10,
+  },
+  image: {
+    width: 80,
+    height: 80,
+    alignSelf: "center",
+    borderRadius: 20,
+    marginTop: 20
   },
 });
