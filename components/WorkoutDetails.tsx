@@ -5,6 +5,7 @@ import { StyleSheet, Image, TouchableOpacity } from "react-native";
 
 type WorkoutDetailsProps = {
   title: string;
+  duration: string;
   image: any;
   setCountdown: (seconds: number) => void;
   setStarted: (started: boolean) => void;
@@ -13,6 +14,7 @@ type WorkoutDetailsProps = {
 
 export function WorkoutDetails({
   title,
+  duration,
   image,
   setCountdown,
   setStarted,
@@ -22,6 +24,7 @@ export function WorkoutDetails({
     <>
       <ThemedView style={styles.container}>
         <ThemedText type="title">{title}</ThemedText>
+        <ThemedText style={styles.durationText}>Duration: {duration}</ThemedText>
         <Image source={image} style={styles.details_img} />
         <TouchableOpacity
           onPress={() => {
@@ -49,8 +52,9 @@ const styles = StyleSheet.create({
     width: 200,
     height: 200,
     resizeMode: "cover",
-    marginTop: 30,
+    marginTop: 15,
     marginBottom: 30,
+    borderRadius: 5
   },
   button: {
     backgroundColor: "#FFFFFF",
@@ -63,4 +67,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
     paddingHorizontal: 80,
   },
+  durationText: {
+    fontSize: 30,
+    lineHeight: 30,
+    fontWeight: '300',
+    marginTop: 15
+  }
 });

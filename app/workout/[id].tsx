@@ -176,6 +176,7 @@ export default function WorkoutDetailScreen() {
     return (
       <WorkoutDetails
         title={workout.title}
+        duration={workout.totalDuration}
         image={workout.stretches[0].image}
         setCountdown={setCountdown}
         setStarted={setStarted}
@@ -284,24 +285,6 @@ const styles = StyleSheet.create({
     resizeMode: "cover",
     borderRadius: 150,
     marginBottom: 20,
-  },
-  button: {
-    backgroundColor: "#FFFFFF",
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 5,
-  },
-  buttonText: {
-    color: "#000000",
-    fontSize: 16,
-    paddingHorizontal: 80,
-  },
-  details_img: {
-    width: 200,
-    height: 200,
-    resizeMode: "cover",
-    marginTop: 30,
-    marginBottom: 30,
   },
   countdown_container: {
     flex: 1,
