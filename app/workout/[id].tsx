@@ -9,6 +9,7 @@ import workoutDetails from "@/data/workoutData";
 import { ChangeSymbol } from "@/components/ui/ChangeSymbol";
 import { updateStreak } from "@/data/streakData";
 import { WorkoutFinished } from "@/components/WorkoutFinished";
+import { ControlButtons } from "@/components/ControlButtons";
 
 export default function WorkoutDetailScreen() {
   const { id } = useLocalSearchParams();
@@ -249,52 +250,16 @@ export default function WorkoutDetailScreen() {
               </ThemedText>
             )}
 
-            <ThemedView style={styles.controlButtonsContainer}>
-              <TouchableOpacity
-                onPress={() => {
-                  if (currentStretchIndex > 0 && !isChangingSides) {
-                    setCurrentStretchIndex(currentStretchIndex - 1);
-                  }
-                }}
-                disabled={isChangingSides}
-              >
-                <Image
-                  source={require("@/assets/images/back_white.png")}
-                  style={[
-                    styles.controlButtons,
-                    isChangingSides && styles.disabledButton,
-                  ]}
-                />
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={togglePause}
-                disabled={isChangingSides}
-              >
-                <Image
-                  source={paused ? playIcon : pauseIcon}
-                  style={[
-                    styles.pauseButton,
-                    isChangingSides && styles.disabledButton,
-                  ]}
-                />
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => {
-                  if (!isChangingSides) {
-                    setCurrentStretchIndex(currentStretchIndex + 1);
-                  }
-                }}
-                disabled={isChangingSides}
-              >
-                <Image
-                  source={require("@/assets/images/skip_white.png")}
-                  style={[
-                    styles.controlButtons,
-                    isChangingSides && styles.disabledButton,
-                  ]}
-                />
-              </TouchableOpacity>
-            </ThemedView>
+            <ControlButtons 
+              currentStretchIndex={currentStretchIndex}  
+              isChangingSides={isChangingSides}
+              setCurrentStretchIndex={setCurrentStretchIndex}
+              togglePause={togglePause}
+              paused={paused}
+              playIcon={playIcon}
+              pauseIcon={pauseIcon}
+            />
+
           </ThemedView>
         </ThemedView>
       ) : (
@@ -337,22 +302,6 @@ const styles = StyleSheet.create({
     color: "#000000", // Black text for contrast
     fontSize: 16,
     paddingHorizontal: 80,
-  },
-  controlButtons: {
-    width: 80,
-    height: 80,
-    resizeMode: "cover",
-  },
-  pauseButton: {
-    width: 80,
-    height: 80,
-    marginHorizontal: 30,
-  },
-  controlButtonsContainer: {
-    flex: 1,
-    width: "100%",
-    flexDirection: "row",
-    marginTop: 50,
   },
   details_img: {
     width: 200,
