@@ -158,7 +158,11 @@ export default function StretchTimingScreen() {
                 >
                   <ThemedText style={styles.modalButtonText}>Cancel</ThemedText>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={saveWorkout}>
+                <TouchableOpacity
+                  onPress={saveWorkout}
+                  disabled={name.trim().length == 0}
+                  style={name.trim().length == 0 && { opacity: 0.5 }}
+                >
                   <ThemedText style={styles.modalButtonText}>Accept</ThemedText>
                 </TouchableOpacity>
               </ThemedView>
