@@ -14,6 +14,7 @@ import { StretchPickCard } from "@/components/StretchPickCard";
 
 export default function CustomizerScreen() {
   const stretchArray = Object.entries(stretchData);
+  console.log(stretchArray)
   const [selectedStretches, setSelectedStretches] = useState<{
     [key: string]: boolean;
   }>({});
@@ -37,13 +38,13 @@ export default function CustomizerScreen() {
         numColumns={2}
         columnWrapperStyle={{ justifyContent: "space-between" }}
         renderItem={({ item }) => {
-          const [name, imageUrl] = item;
+          const [name, data] = item;
           return (
             <TouchableOpacity onPress={() => toggleSelection(name)}>
               <ThemedView>
                 <StretchPickCard
                   title={name}
-                  imagePath={imageUrl[0]}
+                  imagePath={data.image}
                   selected={selectedStretches[name] || false}
                 />
               </ThemedView>

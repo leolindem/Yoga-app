@@ -71,9 +71,9 @@ export default function StretchTimingScreen() {
       totalDuration: totalDuration,
       stretches: Object.entries(timedStretchDict).map(([name, duration]) => ({
         name: name,
-        image: stretchData[name][0],
+        image: stretchData[name].image,
         duration: duration,
-        changeSide: stretchData[name][1],
+        changeSide: stretchData[name].changeSide,
       })),
     };
 
@@ -100,7 +100,7 @@ export default function StretchTimingScreen() {
       >
         {Object.entries(timedStretchDict).map(([name, duration]) => (
           <ThemedView key={name} style={styles.strechContainer}>
-            <Image source={stretchData[name][0]} style={styles.timeImage}/>
+            <Image source={stretchData[name].image} style={styles.timeImage}/>
             <ThemedView style={styles.timeContainer}>
               <TouchableOpacity onPress={() => timeMinus(name)}>
                 <Image
