@@ -14,7 +14,6 @@ import { StretchPickCard } from "@/components/StretchPickCard";
 
 export default function CustomizerScreen() {
   const stretchArray = Object.entries(stretchData);
-  console.log(stretchArray)
   const [selectedStretches, setSelectedStretches] = useState<{
     [key: string]: boolean;
   }>({});

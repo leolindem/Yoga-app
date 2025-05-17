@@ -13,7 +13,7 @@ import {
 
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
-import workoutDetails, { saveWorkouts } from "@/data/workoutData";
+import workoutDetails, { addWorkout } from "@/data/workoutData";
 import stretchData from "@/data/stretchesData";
 
 export default function StretchTimingScreen() {
@@ -56,7 +56,6 @@ export default function StretchTimingScreen() {
   };
 
   const saveWorkout = async () => {
-    // Calculate total duration
     const totalSeconds = Object.values(timedStretchDict).reduce(
       (a, b) => a + b,
       0
@@ -65,7 +64,6 @@ export default function StretchTimingScreen() {
     const seconds = totalSeconds % 60;
     const totalDuration = `${minutes}:${seconds.toString().padStart(2, "0")}`;
 
-    // Create new workout object
     const newWorkout = {
       title: name,
       totalDuration: totalDuration,
@@ -77,14 +75,7 @@ export default function StretchTimingScreen() {
       })),
     };
 
-    // Add new workout to workoutDetails
-    const newId = (Object.keys(workoutDetails).length + 1).toString();
-    workoutDetails[newId] = newWorkout;
-
-    // Save to AsyncStorage
-    await saveWorkouts();
-
-    // Navigate back to main screen
+    await addWorkout(newWorkout);
     router.replace("/");
   };
 

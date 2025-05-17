@@ -5,7 +5,7 @@ import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { StyleSheet, Image, TouchableOpacity } from "react-native";
 import { Bar as ProgressBar } from "react-native-progress";
-import workoutDetails from "@/data/workoutData";
+import { Workout, loadWorkouts } from "@/data/workoutData";
 import { ChangeSymbol } from "@/components/ui/ChangeSymbol";
 import { updateStreak } from "@/data/streakData";
 import { WorkoutFinished } from "@/components/WorkoutFinished";
@@ -14,25 +14,40 @@ import { WorkoutDetails } from "@/components/WorkoutDetails";
 
 export default function WorkoutDetailScreen() {
   const { id } = useLocalSearchParams();
-  const workout = workoutDetails[id as string];
-  const router = useRouter();
+  const [workoutArray, setWorkoutArray] = useState<Record<string, Workout>>({});
   const [started, setStarted] = useState(false);
   const [countdown, setCountdown] = useState(0);
   const [countdownFinished, setCountdownFinished] = useState(false);
   const [currentStretchIndex, setCurrentStretchIndex] = useState(0);
-  const [seconds, setSeconds] = useState(workout.stretches[0].duration);
+  const [seconds, setSeconds] = useState(0);
   const [progress, setProgress] = useState(0);
   const [paused, setPaused] = useState(false);
   const [isChangingSides, setIsChangingSides] = useState(false);
   const [changeSidesCountdown, setChangeSidesCountdown] = useState(5);
   const [hasChangedSides, setHasChangedSides] = useState(false);
-  const totalStretches = workout.stretches.length;
-  const pauseIcon = require("@/assets/images/pause_white.png");
-  const playIcon = require("@/assets/images/play_white.png");
   const [currentStreak, setCurrentStreak] = useState(0);
 
   const intervalRef = useRef<number | null>(null);
   const changeSidesIntervalRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    const loadWorkoutsData = async () => {
+      const loadedWorkouts = await loadWorkouts();
+      setWorkoutArray(loadedWorkouts ?? {});
+    };
+    loadWorkoutsData();
+  }, []);
+
+  const workout = workoutArray[id as string];
+  const totalStretches = workout?.stretches?.length ?? 0;
+  const pauseIcon = require("@/assets/images/pause_white.png");
+  const playIcon = require("@/assets/images/play_white.png");
+
+  useEffect(() => {
+    if (workout) {
+      setSeconds(workout.stretches[0].duration);
+    }
+  }, [workout]);
 
   useEffect(() => {
     if (isChangingSides) {
@@ -62,6 +77,7 @@ export default function WorkoutDetailScreen() {
 
   useEffect(() => {
     if (
+      !workout ||
       paused ||
       currentStretchIndex >= totalStretches ||
       !started ||
@@ -122,21 +138,23 @@ export default function WorkoutDetailScreen() {
       }
     };
   }, [
+    workout,
     currentStretchIndex,
     paused,
     started,
     countdown,
     isChangingSides,
     hasChangedSides,
+    totalStretches,
   ]);
 
   useEffect(() => {
-    if (currentStretchIndex < totalStretches) {
+    if (workout && currentStretchIndex < totalStretches) {
       setProgress(0);
       setSeconds(workout.stretches[currentStretchIndex].duration);
       setHasChangedSides(false);
     }
-  }, [currentStretchIndex]);
+  }, [workout, currentStretchIndex, totalStretches]);
 
   useEffect(() => {
     if (started && countdown > 0) {
@@ -160,7 +178,7 @@ export default function WorkoutDetailScreen() {
         setCurrentStreak(newStreak);
       });
     }
-  }, [currentStretchIndex]);
+  }, [currentStretchIndex, totalStretches]);
 
   const togglePause = () => {
     setPaused((prev) => !prev);
@@ -171,6 +189,16 @@ export default function WorkoutDetailScreen() {
       intervalRef.current = null;
     }
   };
+
+  if (!workout) {
+    return (
+      <ThemedView
+        style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+      >
+        <ThemedText>Loading workout...</ThemedText>
+      </ThemedView>
+    );
+  }
 
   if (!started) {
     return (
@@ -184,6 +212,7 @@ export default function WorkoutDetailScreen() {
       />
     );
   }
+
   if (countdown > 0) {
     return (
       <ThemedView style={styles.countdown_container}>

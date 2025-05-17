@@ -24,7 +24,6 @@ export const updateStreak = async (): Promise<number> => {
   try {
     const data = await getStreakData();
     const today = new Date().toISOString().split('T')[0];
-    console.log("updating")
     if (!data.lastWorkoutDate) {
       // First workout ever
       await AsyncStorage.setItem(STREAK_KEY, JSON.stringify({

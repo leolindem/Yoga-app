@@ -1,5 +1,5 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import stretchesData from './stretchesData';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import stretchesData from "./stretchesData";
 
 export type Workout = {
   title: string;
@@ -27,13 +27,13 @@ const defaultWorkouts: Record<string, Workout> = {
         name: "Forward Bend",
         image: require("@/assets/images/forward_bend.png"),
         duration: 15,
-        changeSide: false
+        changeSide: false,
       },
       {
         name: "Shoulder Stretch",
         image: require("@/assets/images/shoulder_stretch.png"),
         duration: 10,
-        changeSide: true
+        changeSide: true,
       },
     ],
   },
@@ -51,13 +51,13 @@ const defaultWorkouts: Record<string, Workout> = {
         name: "Hamstring Stretch",
         image: require("@/assets/images/hamstring_stretch.png"),
         duration: 15,
-        changeSide: true
+        changeSide: true,
       },
       {
         name: "Shoulder Stretch",
         image: require("@/assets/images/shoulder_stretch.png"),
         duration: 10,
-        changeSide: true
+        changeSide: true,
       },
     ],
   },
@@ -68,42 +68,58 @@ let workoutDetails: Record<string, Workout> = { ...defaultWorkouts };
 // Load workouts from AsyncStorage
 export const loadWorkouts = async () => {
   try {
-    const storedWorkouts = await AsyncStorage.getItem('workouts');
+    const storedWorkouts = await AsyncStorage.getItem("workouts");
     if (storedWorkouts) {
       const parsedWorkouts = JSON.parse(storedWorkouts);
       // Convert stored image strings back to require statements
-      Object.keys(parsedWorkouts).forEach(key => {
+      Object.keys(parsedWorkouts).forEach((key) => {
         parsedWorkouts[key].stretches.forEach((stretch: any) => {
-          if (typeof stretch.image === 'string') {
+          if (typeof stretch.image === "string") {
             // Map the stored image name to the actual image from stretchesData
-            stretch.image = stretchesData[stretch.name] || require("@/assets/images/lunge.png");
+            stretch.image =
+              stretchesData[stretch.name] ||
+              require("@/assets/images/lunge.png");
           }
         });
       });
       workoutDetails = parsedWorkouts;
+      return workoutDetails;
+    } else {
+      await saveWorkouts(defaultWorkouts);
+      workoutDetails = defaultWorkouts;
+      return workoutDetails;
     }
   } catch (error) {
-    console.error('Error loading workouts:', error);
+    console.error("Error loading workouts:", error);
+    return workoutDetails;
   }
 };
 
 // Save workouts to AsyncStorage
-export const saveWorkouts = async () => {
+const saveWorkouts = async (workouts: Record<string, Workout>) => {
   try {
     // Convert require statements to strings before saving
-    const workoutsToSave = { ...workoutDetails };
-    Object.keys(workoutsToSave).forEach(key => {
+    const workoutsToSave = { ...workouts };
+    Object.keys(workoutsToSave).forEach((key) => {
       workoutsToSave[key].stretches.forEach((stretch: any) => {
-        if (typeof stretch.image === 'object') {
+        if (typeof stretch.image === "object") {
           // Store the stretch name as the image identifier
           stretch.image = stretch.name;
         }
       });
     });
-    await AsyncStorage.setItem('workouts', JSON.stringify(workoutsToSave));
+    await AsyncStorage.setItem("workouts", JSON.stringify(workoutsToSave));
+    workoutDetails = workouts;
   } catch (error) {
-    console.error('Error saving workouts:', error);
+    console.error("Error saving workouts:", error);
   }
+};
+
+export const addWorkout = async (workout: Workout) => {
+  const newId = (Object.keys(workoutDetails).length + 1).toString();
+  const updatedWorkouts = { ...workoutDetails, [newId]: workout };
+  await saveWorkouts(updatedWorkouts);
+  return newId;
 };
 
 export default workoutDetails;

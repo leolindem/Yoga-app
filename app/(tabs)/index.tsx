@@ -1,29 +1,27 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { StyleSheet, SafeAreaView, FlatList, Image } from "react-native";
 
-import { ThemedText } from "@/components/ThemedText";
-import { ThemedView } from "@/components/ThemedView";
 import { WorkoutCard } from "@/components/WorkoutCard";
-import workoutDetails, { Workout, loadWorkouts } from "@/data/workoutData";
+import { Workout, loadWorkouts } from "@/data/workoutData";
 
 export default function HomeScreen() {
+  const [workoutArray, setWorkoutArray] = useState<Workout[]>([]);
   useEffect(() => {
-    loadWorkouts();
+    const loadWorkoutsData = async () => {
+      const loadedWorkouts = await loadWorkouts();
+      setWorkoutArray(Object.values(loadedWorkouts ?? {}));
+    };
+    loadWorkoutsData();
   }, []);
 
-  const workoutArray: Workout[] = Object.values(workoutDetails);
 
   return (
     <>
       <SafeAreaView>
-          <Image
-            source={require("@/assets/images/Logo.png")}
-            style={styles.image}
-          ></Image>
-        {/* <ThemedText type="title" style={styles.container}>
-          Good Stretch
-        </ThemedText> */}
-
+        <Image
+          source={require("@/assets/images/Logo.png")}
+          style={styles.image}
+        ></Image>
         <FlatList
           data={workoutArray}
           keyExtractor={(item, index) => index.toString()}
@@ -64,6 +62,6 @@ const styles = StyleSheet.create({
     height: 80,
     alignSelf: "center",
     borderRadius: 20,
-    marginTop: 20
+    marginTop: 20,
   },
 });
