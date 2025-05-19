@@ -1,9 +1,9 @@
 import { useState, useEffect, useRef } from "react";
 import React from "react";
-import { useLocalSearchParams, useRouter } from "expo-router";
+import { useLocalSearchParams } from "expo-router";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
-import { StyleSheet, Image, TouchableOpacity } from "react-native";
+import { StyleSheet, Image } from "react-native";
 import { Bar as ProgressBar } from "react-native-progress";
 import { Workout, loadWorkouts } from "@/data/workoutData";
 import { ChangeSymbol } from "@/components/ui/ChangeSymbol";

@@ -13,7 +13,7 @@ import {
 
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
-import workoutDetails, { addWorkout } from "@/data/workoutData";
+import { addWorkout } from "@/data/workoutData";
 import stretchData from "@/data/stretchesData";
 
 export default function StretchTimingScreen() {

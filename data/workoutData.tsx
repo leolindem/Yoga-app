@@ -121,5 +121,3 @@ export const addWorkout = async (workout: Workout) => {
   await saveWorkouts(updatedWorkouts);
   return newId;
 };
-
-export default workoutDetails;
