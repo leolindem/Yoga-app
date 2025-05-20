@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { Link, Href } from "expo-router";
+import * as Haptics from "expo-haptics";
 import React from "react";
 
 type WorkoutCardProps = {
@@ -28,7 +29,9 @@ export function WorkoutCard({
   return (
     <>
       <Link href={pathname as Href} asChild>
-        <TouchableOpacity activeOpacity={0.7}>
+        <TouchableOpacity activeOpacity={0.7} onPress={() => {
+          Haptics.selectionAsync();
+        }}>
           <ThemedView style={styles.card}>
             <Image
               source={image_url}

@@ -4,12 +4,10 @@ import {
   SafeAreaView,
   FlatList,
   Image,
-  Button,
-  View,
 } from "react-native";
 
 import { WorkoutCard } from "@/components/WorkoutCard";
-import { Workout, loadWorkouts, deleteWorkout } from "@/data/workoutData";
+import { Workout, loadWorkouts } from "@/data/workoutData";
 
 export default function HomeScreen() {
   const [workoutArray, setWorkoutArray] = useState<
