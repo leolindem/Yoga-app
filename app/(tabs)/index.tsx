@@ -1,19 +1,34 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, SafeAreaView, FlatList, Image } from "react-native";
+import {
+  StyleSheet,
+  SafeAreaView,
+  FlatList,
+  Image,
+  Button,
+  View,
+} from "react-native";
 
 import { WorkoutCard } from "@/components/WorkoutCard";
-import { Workout, loadWorkouts } from "@/data/workoutData";
+import { Workout, loadWorkouts, deleteWorkout } from "@/data/workoutData";
 
 export default function HomeScreen() {
-  const [workoutArray, setWorkoutArray] = useState<Workout[]>([]);
+  const [workoutArray, setWorkoutArray] = useState<
+    { id: string; workout: Workout }[]
+  >([]);
+
   useEffect(() => {
     const loadWorkoutsData = async () => {
       const loadedWorkouts = await loadWorkouts();
-      setWorkoutArray(Object.values(loadedWorkouts ?? {}));
+      const workoutList = Object.entries(loadedWorkouts ?? {}).map(
+        ([id, workout]) => ({
+          id,
+          workout,
+        })
+      );
+      setWorkoutArray(workoutList);
     };
     loadWorkoutsData();
   }, []);
-
 
   return (
     <>
@@ -24,15 +39,15 @@ export default function HomeScreen() {
         ></Image>
         <FlatList
           data={workoutArray}
-          keyExtractor={(item, index) => index.toString()}
+          keyExtractor={(item) => item.id}
           numColumns={2}
           columnWrapperStyle={styles.columnWrapper}
-          renderItem={({ item, index }) => (
+          renderItem={({ item }) => (
             <WorkoutCard
-              title={item.title}
-              time={item.totalDuration}
-              pathname={`/workout/${(index + 1).toString()}`}
-              image_url={item.stretches[0].image}
+              title={item.workout.title}
+              time={item.workout.totalDuration}
+              pathname={`/workout/${item.id}`}
+              image_url={item.workout.stretches[0].image}
             />
           )}
           contentContainerStyle={styles.grid}

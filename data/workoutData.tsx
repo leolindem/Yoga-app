@@ -116,8 +116,23 @@ const saveWorkouts = async (workouts: Record<string, Workout>) => {
 };
 
 export const addWorkout = async (workout: Workout) => {
-  const newId = (Object.keys(workoutDetails).length + 1).toString();
+  const ids = Object.keys(workoutDetails).map((id) => parseInt(id));
+  const maxId = ids.length > 0 ? Math.max(...ids) : 0;
+  const newId = (maxId + 1).toString()
   const updatedWorkouts = { ...workoutDetails, [newId]: workout };
   await saveWorkouts(updatedWorkouts);
   return newId;
 };
+
+export const deleteWorkout = async(id: string) => {
+  try {
+    const updatedWorkouts = {...workoutDetails};
+    delete updatedWorkouts[id];
+    saveWorkouts(updatedWorkouts);
+    return true;
+  }
+  catch(error) {
+    console.error("Error deleting workout:", error)
+    return false;
+  }
+}
