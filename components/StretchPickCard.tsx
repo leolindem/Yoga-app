@@ -1,29 +1,37 @@
 import React from "react";
 import { ThemedText } from "./ThemedText";
 import { ThemedView } from "./ThemedView";
-import {
-  StyleSheet,
-  Image,
-  TouchableOpacity,
-} from "react-native";
+import { StyleSheet, Image } from "react-native";
 
 type StrechCardProps = {
   title: string;
   imagePath: number;
+  type: string;
   selected: boolean;
 };
 
-export function StretchPickCard({ title, imagePath, selected = false }: StrechCardProps) {
+export function StretchPickCard({
+  title,
+  imagePath,
+  type,
+  selected = false,
+}: StrechCardProps) {
   return (
     <>
-      <ThemedView style={!selected ? styles.card : styles.selectedCard }>
-        <Image
-          source={imagePath}
-          style={styles.image}
-        />
+      <ThemedView style={!selected ? styles.card : styles.selectedCard}>
+        <Image source={imagePath} style={styles.image} />
         <ThemedText type="defaultSemiBold" style={styles.stretchText}>
           {title}
         </ThemedText>
+        <ThemedView
+          style={
+            type === "dynamic"
+              ? styles.typeDynamicContainer
+              : styles.typeStaticContainer
+          }
+        >
+          <ThemedText>{type}</ThemedText>
+        </ThemedView>
       </ThemedView>
     </>
   );
@@ -57,5 +65,17 @@ const styles = StyleSheet.create({
   },
   stretchText: {
     marginTop: 10,
+  },
+  typeDynamicContainer: {
+    backgroundColor: "#7189FF",
+    paddingHorizontal: 10,
+    marginTop: 5,
+    borderRadius: 15,
+  },
+  typeStaticContainer: {
+    backgroundColor: "#624CAB",
+    paddingHorizontal: 10,
+    marginTop: 5,
+    borderRadius: 15,
   },
 });

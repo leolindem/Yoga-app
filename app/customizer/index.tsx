@@ -3,7 +3,6 @@ import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import {
   StyleSheet,
-  SafeAreaView,
   FlatList,
   TouchableOpacity,
 } from "react-native";
@@ -17,7 +16,6 @@ export default function CustomizerScreen() {
   const [selectedStretches, setSelectedStretches] = useState<{
     [key: string]: boolean;
   }>({});
-
   const toggleSelection = (name: string) => {
     setSelectedStretches((prevSelected) => ({
       ...prevSelected,
@@ -44,6 +42,7 @@ export default function CustomizerScreen() {
                 <StretchPickCard
                   title={name}
                   imagePath={data.image}
+                  type={data.type}
                   selected={selectedStretches[name] || false}
                 />
               </ThemedView>
