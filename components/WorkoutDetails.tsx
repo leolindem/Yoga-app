@@ -2,6 +2,7 @@ import React from "react";
 import { ThemedView } from "./ThemedView";
 import { ThemedText } from "./ThemedText";
 import { StyleSheet, Image, TouchableOpacity } from "react-native";
+import * as Haptics from "expo-haptics";
 
 type WorkoutDetailsProps = {
   title: string;
@@ -31,6 +32,7 @@ export function WorkoutDetails({
             setCountdown(3);
             setStarted(true);
             setCountdownFinished(false);
+            Haptics.selectionAsync();
           }}
           style={styles.button}
         >

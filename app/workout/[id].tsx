@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import React from "react";
 import { useLocalSearchParams } from "expo-router";
+import * as Haptics from "expo-haptics";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { StyleSheet, Image } from "react-native";
@@ -30,6 +31,7 @@ export default function WorkoutDetailScreen() {
   const intervalRef = useRef<number | null>(null);
   const changeSidesIntervalRef = useRef<number | null>(null);
 
+  // Loading workouts handler
   useEffect(() => {
     const loadWorkoutsData = async () => {
       const loadedWorkouts = await loadWorkouts();
@@ -49,6 +51,7 @@ export default function WorkoutDetailScreen() {
     }
   }, [workout]);
 
+  // Changing sides handler
   useEffect(() => {
     if (isChangingSides) {
       changeSidesIntervalRef.current = setInterval(() => {
@@ -75,6 +78,7 @@ export default function WorkoutDetailScreen() {
     }
   }, [isChangingSides]);
 
+  // Timing for each stretch handler
   useEffect(() => {
     if (
       !workout ||
@@ -107,6 +111,7 @@ export default function WorkoutDetailScreen() {
         if (prevSeconds > 0) return prevSeconds - 1;
 
         if (currentStretchIndex < totalStretches - 1) {
+          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
           setCurrentStretchIndex((prevIndex) => prevIndex + 1);
           return workout.stretches[currentStretchIndex + 1].duration;
         } else {
@@ -148,6 +153,7 @@ export default function WorkoutDetailScreen() {
     totalStretches,
   ]);
 
+  // Changing exercise handler
   useEffect(() => {
     if (workout && currentStretchIndex < totalStretches) {
       setProgress(0);
@@ -156,6 +162,7 @@ export default function WorkoutDetailScreen() {
     }
   }, [workout, currentStretchIndex, totalStretches]);
 
+  // Countdown for stretch
   useEffect(() => {
     if (started && countdown > 0) {
       const timer = setInterval(() => {
@@ -172,6 +179,7 @@ export default function WorkoutDetailScreen() {
     }
   }, [started, countdown]);
 
+  // Finishing workout handler
   useEffect(() => {
     if (currentStretchIndex >= totalStretches) {
       updateStreak().then((newStreak) => {
