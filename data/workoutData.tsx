@@ -18,16 +18,16 @@ const defaultWorkouts: Record<string, Workout> = {
     totalDuration: "2:00",
     stretches: [
       {
-        name: "Hamstring",
-        image: require("@/assets/images/hamstring.png"),
-        duration: 100000000,
+        name: "Leg Swings",
+        image: require("@/assets/images/leg_swings.png"),
+        duration: 30,
         changeSide: true,
       },
       {
-        name: "Forward Bend",
-        image: require("@/assets/images/forward_bend.png"),
-        duration: 15,
-        changeSide: false,
+        name: "High Knees",
+        image: require("@/assets/images/high_knees.png"),
+        duration: 30,
+        changeSide: true,
       },
       {
         name: "Shoulder Stretch",

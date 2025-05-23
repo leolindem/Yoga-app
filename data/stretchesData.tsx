@@ -7,7 +7,8 @@ type BodyPart =
   | "calves"
   | "back"
   | "full body"
-  | "core";
+  | "core"
+  |  "shoulder";
 
 interface WorkoutDetail {
   image: any;
@@ -103,6 +104,30 @@ const workoutDetails: Record<string, WorkoutDetail> = {
     changeSide: true,
     type: "dynamic",
     bodyPart: "legs",
+  },
+  "Arm Swings": {
+    image: require("@/assets/images/arm_swings.png"),
+    changeSide: true,
+    type: "dynamic",
+    bodyPart: "shoulder",
+  },
+  "Side Bend": {
+    image: require("@/assets/images/side_bend.png"),
+    changeSide: true,
+    type: "dynamic",
+    bodyPart: "shoulder",
+  },
+  "Butterfly": {
+    image: require("@/assets/images/butterfly.png"),
+    changeSide: false,
+    type: "static",
+    bodyPart: "legs",
+  },
+  "Cross Body": {
+    image: require("@/assets/images/cross_body.png"),
+    changeSide: true,
+    type: "static",
+    bodyPart: "shoulder",
   },
 };
 
