@@ -10,12 +10,20 @@ import { useState } from "react";
 import { Link, Href } from "expo-router";
 import stretchData from "@/data/stretchesData";
 import { StretchPickCard } from "@/components/StretchPickCard";
+import { CheckboxButtons } from "@/components/CheckboxButtons";
 
 export default function CustomizerScreen() {
   const stretchArray = Object.entries(stretchData);
   const [selectedStretches, setSelectedStretches] = useState<{
     [key: string]: boolean;
   }>({});
+  const [typeSelected, setTypeSelected] = useState<string[]>(["dynamic", "static"])
+
+  const filteredStretchArray = stretchArray.filter(([_, data]) => {
+    const types = [data.type];
+    return types.some((t) => typeSelected.includes(t));
+  });
+
   const toggleSelection = (name: string) => {
     setSelectedStretches((prevSelected) => ({
       ...prevSelected,
@@ -29,8 +37,12 @@ export default function CustomizerScreen() {
   return (
     <>
       <ThemedText style={styles.title}>Choose the Stretches</ThemedText>
+      <CheckboxButtons 
+        typeSelected={typeSelected}
+        setTypeSelected={setTypeSelected}
+      />
       <FlatList
-        data={stretchArray}
+        data={filteredStretchArray}
         keyExtractor={([name]) => name}
         numColumns={2}
         columnWrapperStyle={{ justifyContent: "space-between" }}
