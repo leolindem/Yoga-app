@@ -4,7 +4,7 @@ import { useLocalSearchParams } from "expo-router";
 import * as Haptics from "expo-haptics";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
-import { StyleSheet, Image } from "react-native";
+import { StyleSheet, Image, Vibration } from "react-native";
 import { Bar as ProgressBar } from "react-native-progress";
 import { Workout, loadWorkouts } from "@/data/workoutData";
 import { ChangeSymbol } from "@/components/ui/ChangeSymbol";
@@ -12,6 +12,9 @@ import { updateStreak } from "@/data/streakData";
 import { WorkoutFinished } from "@/components/WorkoutFinished";
 import { ControlButtons } from "@/components/ControlButtons";
 import { WorkoutDetails } from "@/components/WorkoutDetails";
+import { useAudioPlayer } from "expo-audio";
+
+const audioSource = require("@/assets/audio/complete_effect.mp3");
 
 export default function WorkoutDetailScreen() {
   const { id } = useLocalSearchParams();
@@ -31,6 +34,7 @@ export default function WorkoutDetailScreen() {
   const intervalRef = useRef<number | null>(null);
   const changeSidesIntervalRef = useRef<number | null>(null);
 
+  const player = useAudioPlayer(audioSource);
   // Loading workouts handler
   useEffect(() => {
     const loadWorkoutsData = async () => {
@@ -112,6 +116,8 @@ export default function WorkoutDetailScreen() {
 
         if (currentStretchIndex < totalStretches - 1) {
           Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+          player.play();
+          Vibration.vibrate();
           setCurrentStretchIndex((prevIndex) => prevIndex + 1);
           return workout.stretches[currentStretchIndex + 1].duration;
         } else {

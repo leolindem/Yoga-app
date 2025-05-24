@@ -1,8 +1,7 @@
 import React, { useEffect } from "react";
-import { Link, Href } from "expo-router";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
-import { StyleSheet, SafeAreaView, FlatList, Image } from "react-native";
+import { StyleSheet, FlatList } from "react-native";
 import { useState } from "react";
 import { EditworkoutCard } from "@/components/EditWorkoutCard";
 import { Workout, loadWorkouts } from "@/data/workoutData";
