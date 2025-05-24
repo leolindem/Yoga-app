@@ -9,12 +9,18 @@ type EditWorkoutCardProps = {
   title: string;
   image_url: any;
   id: string;
+  setModalVisible: (visible: boolean) => void;
+  setSelectedWorkout: (workoutName: string) => void;
+  setSelectedId: (id: string) => void;
 };
 
 export function EditworkoutCard({
   title,
   image_url,
-  id
+  id,
+  setModalVisible,
+  setSelectedWorkout,
+  setSelectedId
 }: EditWorkoutCardProps) {
   return (
     <>
@@ -25,7 +31,13 @@ export function EditworkoutCard({
             {title}
           </ThemedText>
         </ThemedView>
-        <TouchableOpacity onPress={() => {deleteWorkout(id)}}>
+        <TouchableOpacity
+          onPress={() => {
+            setSelectedWorkout(title);
+            setSelectedId(id)
+            setModalVisible(true);
+          }}
+        >
           <ThemedText
             style={{ marginRight: 10, fontWeight: "bold", color: "red" }}
           >
