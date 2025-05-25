@@ -237,12 +237,16 @@ export default function WorkoutDetailScreen() {
 
   return (
     <>
-      <ThemedView style={styles.workoutTitle}>
-        <ThemedText>
-          Workout {currentStretchIndex + 1} of {totalStretches}
-        </ThemedText>
-        <ThemedText>{workout.title}</ThemedText>
-      </ThemedView>
+      {currentStretchIndex < totalStretches ? (
+        <ThemedView style={styles.workoutTitle}>
+          <ThemedText>
+            Workout {currentStretchIndex + 1} of {totalStretches}
+          </ThemedText>
+          <ThemedText>{workout.stretches[currentStretchIndex].name}</ThemedText>
+        </ThemedView>
+      ) : (
+        <></>
+      )}
 
       {currentStretchIndex < totalStretches ? (
         <ThemedView style={styles.container}>
@@ -311,16 +315,16 @@ const styles = StyleSheet.create({
     flex: 10,
     alignItems: "center",
     justifyContent: "flex-start",
-    marginTop: 50,
+    marginTop: 30,
   },
   workout_container: {
     alignItems: "center",
   },
   workoutTitle: {
-    flex: 1,
     alignItems: "center",
     justifyContent: "center",
     width: "100%",
+    marginTop: 15,
   },
   image: {
     width: 300,

@@ -14,7 +14,7 @@ export function WorkoutFinished({ currentStreak }: WorkoutFinishedProps) {
       <ThemedView style={styles.done}>
         <ThemedText type="title">Workout Done!</ThemedText>
         <ThemedText style={styles.streakText}>
-          Current Streak: {currentStreak}
+          Current Daily Streak: {currentStreak}
         </ThemedText>
         <ThemedView style={styles.doneButton}>
           <TouchableOpacity style={styles.button} onPress={() => router.back()}>
@@ -28,14 +28,12 @@ export function WorkoutFinished({ currentStreak }: WorkoutFinishedProps) {
 
 const styles = StyleSheet.create({
   done: {
-    flex: 10,
     justifyContent: "flex-start",
     alignItems: "center",
     paddingTop: 50,
   },
   doneButton: {
     marginTop: 50,
-    flex: 1,
     alignItems: "center",
   },
   button: {
