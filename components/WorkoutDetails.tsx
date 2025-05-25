@@ -1,13 +1,14 @@
 import React, { useEffect, useRef, useState } from "react";
 import { ThemedView } from "./ThemedView";
 import { ThemedText } from "./ThemedText";
-import { StyleSheet, Image, TouchableOpacity, Animated } from "react-native";
+import { StyleSheet, Image, TouchableOpacity, Animated, FlatList } from "react-native";
 import * as Haptics from "expo-haptics";
 
 type WorkoutDetailsProps = {
   title: string;
   duration: string;
   image: any;
+  stretches: any;
   setCountdown: (seconds: number) => void;
   setStarted: (started: boolean) => void;
   setCountdownFinished: (finished: boolean) => void;
@@ -17,6 +18,7 @@ export function WorkoutDetails({
   title,
   duration,
   image,
+  stretches,
   setCountdown,
   setStarted,
   setCountdownFinished,
@@ -56,6 +58,21 @@ export function WorkoutDetails({
         >
           <ThemedText style={styles.buttonText}>Start Workout</ThemedText>
         </TouchableOpacity>
+        <ThemedText type="subtitle" style={{ marginTop: 15 }}>
+          Workouts:
+        </ThemedText>
+        <FlatList
+          data={stretches}
+          keyExtractor={(item, index) => `${item.name}-${index}`}
+          renderItem={({ item }) => (
+            <ThemedView style={styles.stretchesContainer}>
+              <Image source={item.image} style={styles.image} />
+              <ThemedText type="defaultSemiBold">{item.name}</ThemedText>
+              <ThemedText>{item.duration}s</ThemedText>
+            </ThemedView>
+          )}
+          style={{ marginTop: 20 }}
+        />
       </ThemedView>
 
       {showCloseTip && (
@@ -82,7 +99,7 @@ export function WorkoutDetails({
 
 const styles = StyleSheet.create({
   container: {
-    flex: 10,
+    flex: 1,
     alignItems: "center",
     justifyContent: "flex-start",
     marginTop: 50,
@@ -93,7 +110,7 @@ const styles = StyleSheet.create({
     resizeMode: "cover",
     marginTop: 15,
     marginBottom: 30,
-    borderRadius: 5
+    borderRadius: 5,
   },
   button: {
     backgroundColor: "#FFFFFF",
@@ -109,7 +126,24 @@ const styles = StyleSheet.create({
   durationText: {
     fontSize: 30,
     lineHeight: 30,
-    fontWeight: '300',
-    marginTop: 15
-  }
+    fontWeight: "300",
+    marginTop: 15,
+  },
+  image: {
+    resizeMode: "cover",
+    borderRadius: 5,
+    width: 40,
+    height: 40,
+  },
+  stretchesContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    borderBottomWidth: 2,
+    borderColor: "#343635",
+    alignSelf: "center",
+    width: "90%",
+    padding: 5,
+    marginBottom: 10,
+    justifyContent: "space-between"
+  },
 });

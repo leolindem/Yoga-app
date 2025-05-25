@@ -220,6 +220,7 @@ export default function WorkoutDetailScreen() {
         title={workout.title}
         duration={workout.totalDuration}
         image={workout.stretches[0].image}
+        stretches={workout.stretches}
         setCountdown={setCountdown}
         setStarted={setStarted}
         setCountdownFinished={setCountdownFinished}
