@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { ThemedView } from "./ThemedView";
 import { ThemedText } from "./ThemedText";
-import { StyleSheet, Image, TouchableOpacity } from "react-native";
+import { StyleSheet, Image, TouchableOpacity, Animated } from "react-native";
 import * as Haptics from "expo-haptics";
 
 type WorkoutDetailsProps = {
@@ -21,11 +21,29 @@ export function WorkoutDetails({
   setStarted,
   setCountdownFinished,
 }: WorkoutDetailsProps) {
+  const [showCloseTip, setShowCloseTip] = useState(false);
+  const fadeAnim = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowCloseTip(true);
+      Animated.timing(fadeAnim, {
+        toValue: 1,
+        duration: 500,
+        useNativeDriver: true,
+      }).start();
+    }, 5000);
+
+    return () => clearTimeout(timer);
+  }, []);
+  
   return (
     <>
       <ThemedView style={styles.container}>
         <ThemedText type="title">{title}</ThemedText>
-        <ThemedText style={styles.durationText}>Duration: {duration}</ThemedText>
+        <ThemedText style={styles.durationText}>
+          Duration: {duration}
+        </ThemedText>
         <Image source={image} style={styles.details_img} />
         <TouchableOpacity
           onPress={() => {
@@ -39,6 +57,25 @@ export function WorkoutDetails({
           <ThemedText style={styles.buttonText}>Start Workout</ThemedText>
         </TouchableOpacity>
       </ThemedView>
+
+      {showCloseTip && (
+        <Animated.View
+          style={{
+            position: "absolute",
+            top: 30,
+            alignSelf: "center",
+            opacity: fadeAnim,
+            backgroundColor: "rgba(0,0,0,0.6)",
+            paddingVertical: 6,
+            paddingHorizontal: 12,
+            borderRadius: 12,
+          }}
+        >
+          <ThemedText style={{ color: "white", fontSize: 14 }}>
+            Swipe down to close
+          </ThemedText>
+        </Animated.View>
+      )}
     </>
   );
 }
