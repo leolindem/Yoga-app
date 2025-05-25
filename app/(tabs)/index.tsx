@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import {
   StyleSheet,
   SafeAreaView,
   FlatList,
   Image,
+  Animated
 } from "react-native";
 
 import { WorkoutCard } from "@/components/WorkoutCard";
@@ -13,6 +14,8 @@ export default function HomeScreen() {
   const [workoutArray, setWorkoutArray] = useState<
     { id: string; workout: Workout }[]
   >([]);
+
+  const scrollY = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
     const loadWorkoutsData = async () => {
@@ -28,18 +31,30 @@ export default function HomeScreen() {
     loadWorkoutsData();
   }, []);
 
+  const logoOpacity = scrollY.interpolate({
+    inputRange: [0, 50],
+    outputRange: [1, 0],
+    extrapolate: "clamp",
+  });
+
   return (
     <>
-      <SafeAreaView>
-        <Image
-          source={require("@/assets/images/Logo.png")}
-          style={styles.image}
-        ></Image>
-        <FlatList
+      <SafeAreaView style={{ flex: 1 }}>
+        <Animated.FlatList
           data={workoutArray}
           keyExtractor={(item) => item.id}
           numColumns={2}
           columnWrapperStyle={styles.columnWrapper}
+          onScroll={Animated.event(
+            [{ nativeEvent: { contentOffset: { y: scrollY } } }],
+            { useNativeDriver: true }
+          )}
+          ListHeaderComponent={
+            <Animated.Image
+              source={require("@/assets/images/Logo.png")}
+              style={[styles.image, { opacity: logoOpacity }]}
+            />
+          }
           renderItem={({ item }) => (
             <WorkoutCard
               title={item.workout.title}
@@ -62,7 +77,7 @@ const styles = StyleSheet.create({
     paddingTop: 20,
   },
   grid: {
-    paddingBottom: 150,
+    paddingBottom: 100,
     marginTop: 15,
     paddingHorizontal: 10,
   },
@@ -75,6 +90,6 @@ const styles = StyleSheet.create({
     height: 80,
     alignSelf: "center",
     borderRadius: 20,
-    marginTop: 20,
+    marginTop: 10,
   },
 });
