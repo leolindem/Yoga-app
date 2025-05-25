@@ -60,11 +60,14 @@ export default function EditWorkout() {
             <ThemedText style={{ color: "#000000" }}>
               Are you sure you want to delete:
             </ThemedText>
-            <ThemedText style={{ color: "#000000" }}>
+            <ThemedText style={{ color: "#000000", fontWeight: "bold" }}>
               {selectedWorkout}
             </ThemedText>
             <ThemedView style={styles.modalButtonsContainer}>
-              <TouchableOpacity onPress={() => setModalVisible(false)}>
+              <TouchableOpacity
+                onPress={() => setModalVisible(false)}
+                hitSlop={{ top: 30, bottom: 30, left: 30, right: 30 }}
+              >
                 <ThemedText style={styles.modalButtonText}>Cancel</ThemedText>
               </TouchableOpacity>
               <TouchableOpacity
@@ -73,6 +76,7 @@ export default function EditWorkout() {
                   setModalVisible(false);
                   fetchWorkouts();
                 }}
+                hitSlop={{ top: 30, bottom: 30, left: 30, right: 30 }}
               >
                 <ThemedText style={styles.modalButtonText}>Confirm</ThemedText>
               </TouchableOpacity>

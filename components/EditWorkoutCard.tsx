@@ -34,9 +34,10 @@ export function EditworkoutCard({
         <TouchableOpacity
           onPress={() => {
             setSelectedWorkout(title);
-            setSelectedId(id)
+            setSelectedId(id);
             setModalVisible(true);
           }}
+          hitSlop={{ top: 30, bottom: 30, left: 30, right: 30 }}
         >
           <ThemedText
             style={{ marginRight: 10, fontWeight: "bold", color: "red" }}
