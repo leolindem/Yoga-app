@@ -41,39 +41,43 @@ export function WorkoutDetails({
   
   return (
     <>
-      <ThemedView style={styles.container}>
-        <ThemedText type="title">{title}</ThemedText>
-        <ThemedText style={styles.durationText}>
-          Duration: {duration}
-        </ThemedText>
-        <Image source={image} style={styles.details_img} />
-        <TouchableOpacity
-          onPress={() => {
-            setCountdown(3);
-            setStarted(true);
-            setCountdownFinished(false);
-            Haptics.selectionAsync();
-          }}
-          style={styles.button}
-        >
-          <ThemedText style={styles.buttonText}>Start Workout</ThemedText>
-        </TouchableOpacity>
-        <ThemedText type="subtitle" style={{ marginTop: 15 }}>
-          Workouts:
-        </ThemedText>
-        <FlatList
-          data={stretches}
-          keyExtractor={(item, index) => `${item.name}-${index}`}
-          renderItem={({ item }) => (
-            <ThemedView style={styles.stretchesContainer}>
-              <Image source={item.image} style={styles.image} />
-              <ThemedText type="defaultSemiBold">{item.name}</ThemedText>
-              <ThemedText>{item.duration}s</ThemedText>
+      <FlatList
+        data={stretches}
+        keyExtractor={(item, index) => `${item.name}-${index}`}
+        ListHeaderComponent={
+          <>
+            <ThemedView style={styles.container}>
+              <ThemedText type="title">{title}</ThemedText>
+              <ThemedText style={styles.durationText}>
+                Duration: {duration}
+              </ThemedText>
+              <Image source={image} style={styles.details_img} />
+              <TouchableOpacity
+                onPress={() => {
+                  setCountdown(3);
+                  setStarted(true);
+                  setCountdownFinished(false);
+                  Haptics.selectionAsync();
+                }}
+                style={styles.button}
+              >
+                <ThemedText style={styles.buttonText}>Start Workout</ThemedText>
+              </TouchableOpacity>
+              <ThemedText type="subtitle" style={{ marginTop: 15 }}>
+                Workouts:
+              </ThemedText>
             </ThemedView>
-          )}
-          style={{ marginTop: 20 }}
-        />
-      </ThemedView>
+          </>
+        }
+        renderItem={({ item }) => (
+          <ThemedView style={styles.stretchesContainer}>
+            <Image source={item.image} style={styles.image} />
+            <ThemedText type="defaultSemiBold">{item.name}</ThemedText>
+            <ThemedText>{item.duration}s</ThemedText>
+          </ThemedView>
+        )}
+        contentContainerStyle={{ paddingBottom: 100 }}
+      />
 
       {showCloseTip && (
         <Animated.View
