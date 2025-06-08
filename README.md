@@ -1,50 +1,82 @@
-# Welcome to your Expo app 👋
+# Project Architecture Overview
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+This document provides a high level overview of the Yoga App project structure, key components and how data flows through the application. It is intended for new contributors to quickly get familiar with the codebase.
 
-## Get started
+## Directory Layout
+
+```
+├── app/              # Route based screens used by Expo Router
+│   ├── (tabs)/       # Main tab navigator screens
+│   ├── customizer/   # Screens for building a custom workout
+│   ├── edit/         # Screen to remove saved workouts
+│   ├── workout/      # Workout player modal
+│   ├── +not-found.tsx
+│   └── _layout.tsx   # Root navigator layout
+├── components/       # Reusable UI and feature components
+├── constants/        # Theme constants (e.g. Colors)
+├── data/             # Data persistence helpers
+├── hooks/            # Custom React hooks
+├── assets/           # Images, fonts and audio used by the app
+├── scripts/          # Utility scripts (e.g. project reset)
+└── docs/             # Project documentation
+```
+
+The application uses **Expo Router** which relies on the files inside `app/` to automatically create screens and navigators. Layout files (e.g. `_layout.tsx`) define navigators and screen options while the remainder of the file tree represents individual screens.
+
+## Navigation
+
+- `app/_layout.tsx` defines the root `Stack` navigator. It configures the modal presentation for screens such as `workout/[id]` and sets up a custom header.
+- The `(tabs)` folder configures a bottom tab navigator. Two tabs are provided: the home screen (`index.tsx`) and the settings screen (`settings.tsx`).
+- Additional folders under `app/` map to routes in the application, for example `customizer/timeScreen.tsx` or `edit/index.tsx`.
+
+## Components
+
+UI and feature components live in `components/`. Some notable ones include:
+
+- `WorkoutCard` – card used on the home screen to launch a workout.
+- `WorkoutDetails` – shows stretch details before starting a workout.
+- `ControlButtons`, `WorkoutFinished` – used by `workout/[id].tsx` while playing a workout.
+- `StretchPickCard`, `CheckboxButtons` – used in the customizer flow.
+- `ui/` contains smaller presentational pieces (icons, tab bar background etc.).
+
+All text and view components are wrapped in `ThemedText` and `ThemedView` which apply colors based on the current theme with the help of hooks in `hooks/`.
+
+## Data Handling
+
+Workout, streak and stretch information is stored under `data/`.
+
+- `workoutData.tsx` keeps a set of default workouts and exposes `loadWorkouts`, `addWorkout` and `deleteWorkout` helpers. Data is persisted using `AsyncStorage` so workouts remain across sessions.
+- `streakData.tsx` tracks the user's workout streak using the same storage mechanism.
+- `stretchesData.tsx` exports metadata for individual stretches used by both the workout player and customizer screens.
+
+## Assets
+
+Images for stretches and the application icon reside inside the `assets/` directory. Fonts and an audio effect used when a stretch completes are also stored here.
+
+## Useful Scripts & Configuration
+
+- `package.json` defines common Expo scripts (`npm start`, `npm run android`, etc.) and a Jest configuration. Currently there is a snapshot test located at `components/__tests__/ThemedText-test.tsx`.
+- `scripts/reset-project.js` can reset the repository back to a starter template by moving the main folders to `app-example/`.
+- `app.json` and `eas.json` hold the Expo and EAS (Expo Application Services) configuration for building the application.
+
+## Getting Started
 
 1. Install dependencies
-
    ```bash
    npm install
    ```
-
-2. Start the app
-
+2. Start the development server
    ```bash
-    npx expo start
+   npx expo start
+   ```
+3. Run tests
+   ```bash
+   npm test
    ```
 
-In the output, you'll find options to open the app in a
+## Additional Notes
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+The project is written in **TypeScript** and uses path aliases (see `tsconfig.json`) allowing imports starting with `@/` to reference the project root.
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+The codebase aims to support both light and dark themes. Colors are defined in `constants/Colors.ts`, and `hooks/useThemeColor.ts` resolves the appropriate color based on the user's device settings.
 
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
-```
-
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
